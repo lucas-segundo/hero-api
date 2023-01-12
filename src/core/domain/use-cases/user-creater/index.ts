@@ -5,5 +5,5 @@ export type UserCreaterParams = {
 }
 
 export interface UserCreater {
-  create(params: UserCreaterParams)
+  create(params: UserCreaterParams): Promise<UserCreater>
 }
