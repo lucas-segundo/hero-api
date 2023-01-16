@@ -1,3 +1,5 @@
+import { User } from 'core/domain/models/user'
+
 export type UserCreaterParams = {
   name: string
   email: string
@@ -5,5 +7,5 @@ export type UserCreaterParams = {
 }
 
 export interface UserCreater {
-  create(params: UserCreaterParams): Promise<UserCreater>
+  create(params: UserCreaterParams): Promise<User>
 }
