@@ -1,3 +1,4 @@
+import { UnexpectedError } from 'core/app/errors/unexpected-error'
 import { UserCreaterRepository } from 'core/app/protocols/user-creater-repository'
 import { User } from 'core/domain/models/user'
 import {
@@ -9,8 +10,12 @@ export class DbUserCreater implements UserCreater {
   constructor(private readonly userCreaterRepository: UserCreaterRepository) {}
 
   async create(params: UserCreaterParams): Promise<User> {
-    const userCreated = await this.userCreaterRepository.create(params)
+    try {
+      const userCreated = await this.userCreaterRepository.create(params)
 
-    return userCreated
+      return userCreated
+    } catch (error) {
+      throw new UnexpectedError()
+    }
   }
 }
