@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { UnexpectedError } from 'core/app/errors/unexpected-error'
 import { mockUserCreaterRepository } from 'core/app/protocols/user-creater-repository/mock'
 import { User } from 'core/domain/models/user'
 import { UserCreaterParams } from 'core/domain/use-cases/user-creater'
@@ -38,5 +39,14 @@ describe('DbUserCreater', () => {
     const modelData = await sut.create(params)
 
     expect(modelData).toEqual(userCreated)
+  })
+
+  it('should handle error if creation throw', async () => {
+    const { sut, params, userCreaterRepository } = makeSut()
+    userCreaterRepository.create.mockRejectedValueOnce(new Error())
+
+    const modelData = sut.create(params)
+
+    await expect(modelData).rejects.toThrowError(UnexpectedError)
   })
 })
