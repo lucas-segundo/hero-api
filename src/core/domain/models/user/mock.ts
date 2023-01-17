@@ -5,5 +5,5 @@ export const mockUser = (): User => ({
   id: faker.datatype.uuid(),
   name: faker.name.fullName(),
   email: faker.internet.email(),
-  password: faker.internet.password(),
+  passwordHashed: faker.internet.password(),
 })

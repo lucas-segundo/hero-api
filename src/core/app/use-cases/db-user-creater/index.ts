@@ -1,4 +1,5 @@
 import { UnexpectedError } from 'core/app/errors/unexpected-error'
+import { Encrypter } from 'core/app/protocols/encrypter'
 import { UserCreaterRepository } from 'core/app/protocols/user-creater-repository'
 import { User } from 'core/domain/models/user'
 import {
@@ -7,11 +8,21 @@ import {
 } from 'core/domain/use-cases/user-creater'
 
 export class DbUserCreater implements UserCreater {
-  constructor(private readonly userCreaterRepository: UserCreaterRepository) {}
+  constructor(
+    private readonly userCreaterRepository: UserCreaterRepository,
+    private readonly encrypter: Encrypter
+  ) {}
 
-  async create(params: UserCreaterParams): Promise<User> {
+  async create({ email, name, password }: UserCreaterParams): Promise<User> {
     try {
-      const userCreated = await this.userCreaterRepository.create(params)
+      const passwordHashed = await this.encrypter.encrypt({
+        value: password,
+      })
+      const userCreated = await this.userCreaterRepository.create({
+        email,
+        name,
+        passwordHashed,
+      })
 
       return userCreated
     } catch (error) {
