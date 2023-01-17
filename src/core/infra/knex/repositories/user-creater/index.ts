@@ -7,8 +7,11 @@ export class KnexUserCreaterRepository implements UserCreaterRepository {
   constructor(private readonly client: Knex) {}
 
   async create(params: UserCreaterParams): Promise<User> {
-    await this.client.insert(params).into('users')
+    const result = await this.client.insert(params).into('users')
 
-    return null
+    return {
+      id: result[0].toString(),
+      ...params,
+    }
   }
 }
