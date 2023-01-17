@@ -1,3 +1,4 @@
+import { mockUserCreaterRepositoryParams } from 'core/app/protocols/user-creater-repository/mock'
 import { User } from 'core/domain/models/user'
 import { mockUserCreaterParams } from 'core/domain/use-cases/user-creater/mock'
 import { KnexUserCreaterRepository } from '.'
@@ -6,7 +7,7 @@ import dbKnexClient from '../../config/db-client'
 const makeSut = () => {
   const sut = new KnexUserCreaterRepository(dbKnexClient)
   const insertSpy = jest.spyOn(dbKnexClient, 'insert')
-  const userCreaterParams = mockUserCreaterParams()
+  const userCreaterParams = mockUserCreaterRepositoryParams()
 
   return {
     sut,
