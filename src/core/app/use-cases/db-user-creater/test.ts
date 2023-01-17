@@ -69,9 +69,18 @@ describe('DbUserCreater', () => {
     expect(modelData).toEqual(userCreated)
   })
 
-  it('should handle error if creation throw', async () => {
+  it('should handle error if user creater repository throws', async () => {
     const { sut, params, userCreaterRepository } = makeSut()
     userCreaterRepository.create.mockRejectedValueOnce(new Error())
+
+    const modelData = sut.create(params)
+
+    await expect(modelData).rejects.toThrowError(UnexpectedError)
+  })
+
+  it('should handle error if encrypter throws', async () => {
+    const { sut, params, encrypter } = makeSut()
+    encrypter.encrypt.mockRejectedValueOnce(new Error())
 
     const modelData = sut.create(params)
 
