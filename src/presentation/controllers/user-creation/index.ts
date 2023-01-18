@@ -1,3 +1,4 @@
+import { UnexpectedError } from 'app/errors/unexpected-error'
 import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
 import {
@@ -26,11 +27,18 @@ export class UserCreationController {
       }
     }
 
-    const user = await this.userCreater.create(params)
+    try {
+      const user = await this.userCreater.create(params)
 
-    return {
-      data: user,
-      statusCode: HttpStatusCode.CREATED,
+      return {
+        data: user,
+        statusCode: HttpStatusCode.CREATED,
+      }
+    } catch (error) {
+      return {
+        errors: [new UnexpectedError()],
+        statusCode: HttpStatusCode.SERVER_ERROR,
+      }
     }
   }
 }
