@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { UnexpectedError } from 'app/errors/unexpected-error'
 import { User } from 'domain/models/user'
 import { UserCreaterParams } from 'domain/use-cases/user-creater'
 import { mockUserCreater } from 'domain/use-cases/user-creater/mock'
@@ -36,18 +37,6 @@ describe('UserCreationController', () => {
     expect(userCreater.create).toBeCalledWith(params)
   })
 
-  it('should return errors if request is missing the required data', async () => {
-    const { sut, params } = makeSut()
-    params.email = undefined
-    const response = await sut.handle(params)
-    const expectedResponse: HttpErrorResponse = {
-      errors: [new MissingParamError('email')],
-      statusCode: HttpStatusCode.BAD_REQUEST,
-    }
-
-    expect(response).toEqual(expectedResponse)
-  })
-
   it('should return user data after creation', async () => {
     const { sut, params, userCreater } = makeSut()
 
@@ -67,5 +56,31 @@ describe('UserCreationController', () => {
     }
 
     expect(response).toEqual(httpResponse)
+  })
+
+  it('should return errors if request is missing the required data', async () => {
+    const { sut, params } = makeSut()
+    params.email = undefined
+    const response = await sut.handle(params)
+    const expectedResponse: HttpErrorResponse = {
+      errors: [new MissingParamError('email')],
+      statusCode: HttpStatusCode.BAD_REQUEST,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should handle error when something wrong happens', async () => {
+    const { sut, params, userCreater } = makeSut()
+
+    userCreater.create.mockRejectedValueOnce(new Error())
+
+    const response = await sut.handle(params)
+    const expectedResponse: HttpErrorResponse = {
+      errors: [new UnexpectedError()],
+      statusCode: HttpStatusCode.SERVER_ERROR,
+    }
+
+    expect(response).toEqual(expectedResponse)
   })
 })
