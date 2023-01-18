@@ -1,11 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { UserCreaterParams } from 'core/domain/use-cases/user-creater'
-import { mockUserCreater } from 'core/domain/use-cases/user-creater/mock'
-import { MissingParamError } from 'core/presentation/errors/missing-param-error'
-import {
-  HttpErrorResponse,
-  HttpResponse,
-} from 'core/presentation/protocols/http'
+import { UserCreaterParams } from 'domain/use-cases/user-creater'
+import { mockUserCreater } from 'domain/use-cases/user-creater/mock'
+import { MissingParamError } from 'presentation/errors/missing-param-error'
+import { HttpErrorResponse, HttpResponse } from 'presentation/protocols/http'
 import { UserCreation } from '.'
 
 const makeSut = () => {

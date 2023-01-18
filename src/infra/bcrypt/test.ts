@@ -1,6 +1,6 @@
 import { BcryptEncrypter } from '.'
 import * as bcrypt from 'bcrypt'
-import { EncrypterParams } from 'core/app/protocols/encrypter'
+import { EncrypterParams } from 'app/protocols/encrypter'
 import { faker } from '@faker-js/faker'
 
 const makeSut = () => {

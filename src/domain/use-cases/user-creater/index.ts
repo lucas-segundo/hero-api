@@ -1,4 +1,4 @@
-import { User } from 'core/domain/models/user'
+import { User } from 'domain/models/user'
 
 export type UserCreaterParams = {
   name: string

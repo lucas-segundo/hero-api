@@ -1,9 +1,9 @@
 import {
   UserCreaterRepository,
   UserCreaterRepositoryParams,
-} from 'core/app/protocols/user-creater-repository'
-import { User } from 'core/domain/models/user'
-import { UserCreaterParams } from 'core/domain/use-cases/user-creater'
+} from 'app/protocols/user-creater-repository'
+import { User } from 'domain/models/user'
+import { UserCreaterParams } from 'domain/use-cases/user-creater'
 import { Knex } from 'knex'
 
 export class KnexUserCreaterRepository implements UserCreaterRepository {

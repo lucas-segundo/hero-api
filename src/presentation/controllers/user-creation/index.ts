@@ -1,12 +1,6 @@
-import {
-  UserCreater,
-  UserCreaterParams,
-} from 'core/domain/use-cases/user-creater'
-import { MissingParamError } from 'core/presentation/errors/missing-param-error'
-import {
-  HttpErrorResponse,
-  HttpResponse,
-} from 'core/presentation/protocols/http'
+import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
+import { MissingParamError } from 'presentation/errors/missing-param-error'
+import { HttpErrorResponse, HttpResponse } from 'presentation/protocols/http'
 
 export class UserCreation {
   constructor(private readonly userCreater: UserCreater) {}

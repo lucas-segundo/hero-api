@@ -1,6 +1,6 @@
-import { mockUserCreaterRepositoryParams } from 'core/app/protocols/user-creater-repository/mock'
-import { User } from 'core/domain/models/user'
-import { mockUserCreaterParams } from 'core/domain/use-cases/user-creater/mock'
+import { mockUserCreaterRepositoryParams } from 'app/protocols/user-creater-repository/mock'
+import { User } from 'domain/models/user'
+import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
 import { KnexUserCreaterRepository } from '.'
 import dbKnexClient from '../../config/db-client'
 
