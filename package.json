@@ -21,8 +21,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate:dev": "knex --knexfile src/core/infra/knex/knexfile.ts migrate:latest --env dev",
-    "migrate:make": "knex --knexfile src/core/infra/knex/knexfile.ts migrate:make -x ts"
+    "migrate:dev": "knex --knexfile src/infra/knex/knexfile.ts migrate:latest --env dev",
+    "migrate:make": "knex --knexfile src/infra/knex/knexfile.ts migrate:make -x ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

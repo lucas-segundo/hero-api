@@ -2,15 +2,15 @@ import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
 import { HttpErrorResponse, HttpResponse } from 'presentation/protocols/http'
 
-export class UserCreation {
+export class UserCreationController {
   constructor(private readonly userCreater: UserCreater) {}
 
   async handle(
-    requestData: UserCreaterParams
+    params: UserCreaterParams
   ): Promise<HttpResponse | HttpErrorResponse> {
     const errors = []
 
-    const { name, email, password } = requestData
+    const { name, email, password } = params
     !name && errors.push(new MissingParamError('name'))
     !email && errors.push(new MissingParamError('email'))
     !password && errors.push(new MissingParamError('password'))
@@ -22,7 +22,7 @@ export class UserCreation {
       }
     }
 
-    await this.userCreater.create(requestData)
+    await this.userCreater.create(params)
 
     return {
       data: null,

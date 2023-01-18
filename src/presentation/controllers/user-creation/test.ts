@@ -2,12 +2,12 @@ import { faker } from '@faker-js/faker'
 import { UserCreaterParams } from 'domain/use-cases/user-creater'
 import { mockUserCreater } from 'domain/use-cases/user-creater/mock'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
-import { HttpErrorResponse, HttpResponse } from 'presentation/protocols/http'
-import { UserCreation } from '.'
+import { HttpErrorResponse } from 'presentation/protocols/http'
+import { UserCreationController } from '.'
 
 const makeSut = () => {
   const userCreater = mockUserCreater()
-  const sut = new UserCreation(userCreater)
+  const sut = new UserCreationController(userCreater)
 
   const requestData: UserCreaterParams = {
     email: faker.internet.email(),
@@ -22,7 +22,7 @@ const makeSut = () => {
   }
 }
 
-describe('UserCreation', () => {
+describe('UserCreationController', () => {
   it('should create a user with right params', async () => {
     const { sut, userCreater, requestData } = makeSut()
 
