@@ -22,10 +22,10 @@ export class UserCreationController {
       }
     }
 
-    await this.userCreater.create(params)
+    const user = await this.userCreater.create(params)
 
     return {
-      data: null,
+      data: user,
       statusCode: 200,
     }
   }
