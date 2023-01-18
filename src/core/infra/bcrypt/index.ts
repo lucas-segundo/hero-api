@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt'
 
 export class BcryptEncrypter implements Encrypter {
   async encrypt({ value }: EncrypterParams): Promise<string> {
-    await bcrypt.hash(value, 10)
-    return null
+    const hashedValue = await bcrypt.hash(value, 10)
+    return hashedValue
   }
 }
