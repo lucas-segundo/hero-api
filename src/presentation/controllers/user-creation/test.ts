@@ -3,7 +3,11 @@ import { User } from 'domain/models/user'
 import { UserCreaterParams } from 'domain/use-cases/user-creater'
 import { mockUserCreater } from 'domain/use-cases/user-creater/mock'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
-import { HttpErrorResponse, HttpResponse } from 'presentation/protocols/http'
+import {
+  HttpErrorResponse,
+  HttpResponse,
+  HttpStatusCode,
+} from 'presentation/protocols/http'
 import { UserCreationController } from '.'
 
 const makeSut = () => {
@@ -38,7 +42,7 @@ describe('UserCreationController', () => {
     const response = await sut.handle(params)
     const expectedResponse: HttpErrorResponse = {
       errors: [new MissingParamError('email')],
-      statusCode: 403,
+      statusCode: HttpStatusCode.BAD_REQUEST,
     }
 
     expect(response).toEqual(expectedResponse)
@@ -59,7 +63,7 @@ describe('UserCreationController', () => {
 
     const httpResponse: HttpResponse = {
       data: user,
-      statusCode: 200,
+      statusCode: HttpStatusCode.CREATED,
     }
 
     expect(response).toEqual(httpResponse)

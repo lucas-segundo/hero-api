@@ -1,6 +1,10 @@
 import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
-import { HttpErrorResponse, HttpResponse } from 'presentation/protocols/http'
+import {
+  HttpErrorResponse,
+  HttpResponse,
+  HttpStatusCode,
+} from 'presentation/protocols/http'
 
 export class UserCreationController {
   constructor(private readonly userCreater: UserCreater) {}
@@ -18,7 +22,7 @@ export class UserCreationController {
     if (errors.length) {
       return {
         errors,
-        statusCode: 403,
+        statusCode: HttpStatusCode.BAD_REQUEST,
       }
     }
 
@@ -26,7 +30,7 @@ export class UserCreationController {
 
     return {
       data: user,
-      statusCode: 200,
+      statusCode: HttpStatusCode.CREATED,
     }
   }
 }
