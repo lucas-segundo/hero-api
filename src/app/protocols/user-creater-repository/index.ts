@@ -1,5 +1,4 @@
 import { User } from 'domain/models/user'
-import { UserCreaterParams } from 'domain/use-cases/user-creater'
 
 export type UserCreaterRepositoryParams = {
   name: string
