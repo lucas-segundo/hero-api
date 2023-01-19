@@ -1,13 +1,14 @@
 import { UnexpectedError } from 'app/errors/unexpected-error'
 import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
+import { Controller } from 'presentation/protocols/controller'
 import {
   HttpErrorResponse,
   HttpResponse,
   HttpStatusCode,
 } from 'presentation/protocols/http'
 
-export class UserCreationController {
+export class UserCreationController implements Controller {
   constructor(private readonly userCreater: UserCreater) {}
 
   async handle(
