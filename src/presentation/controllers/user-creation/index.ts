@@ -30,6 +30,7 @@ export class UserCreationController implements Controller {
 
     try {
       const user = await this.userCreater.create(params)
+      delete user.passwordHashed
 
       return {
         data: user,
