@@ -5,8 +5,13 @@ import { UsersController } from './users.controller'
 import { UsersService } from './users.service'
 import { createMock } from '@golevelup/ts-jest'
 import { Response } from 'express'
-import { HttpResponse, HttpStatusCode } from 'presentation/protocols/http'
+import {
+  HttpErrorResponse,
+  HttpResponse,
+  HttpStatusCode,
+} from 'presentation/protocols/http'
 import { mockUser } from 'domain/models/user/mock'
+import { faker } from '@faker-js/faker'
 
 const mockResponse = () =>
   createMock<Response>({
@@ -55,5 +60,23 @@ describe('UsersController', () => {
 
     expect(res.status).toBeCalledWith(result.statusCode)
     expect(res.send).toBeCalledWith({ data: result.data })
+  })
+
+  it('should response with right errors after creation fails', async () => {
+    const createSpy = jest.spyOn(userService, 'create')
+    const result: HttpErrorResponse = {
+      errors: [faker.random.words()],
+      statusCode: faker.internet.httpStatusCode({
+        types: ['serverError', 'clientError'],
+      }),
+    }
+    createSpy.mockResolvedValueOnce(result)
+
+    const res = mockResponse()
+    const params = mockUserCreaterParams()
+    await controller.create(params, res)
+
+    expect(res.status).toBeCalledWith(result.statusCode)
+    expect(res.send).toBeCalledWith({ errors: result.errors })
   })
 })
