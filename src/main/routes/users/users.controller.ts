@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Delete, Res } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
+import { Response } from 'express'
+import { handleResponse } from 'main/helpers/handle-response'
 // import { UpdateUserDto } from './dto/update-user.dto'
 
 @Controller('users')
@@ -8,8 +10,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto)
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    const result = await this.usersService.create(createUserDto)
+
+    handleResponse(res, result)
   }
 
   @Get()
