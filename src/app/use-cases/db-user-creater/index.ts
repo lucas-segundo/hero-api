@@ -23,6 +23,7 @@ export class DbUserCreater implements UserCreater {
 
       return userCreated
     } catch (error) {
+      console.log(error)
       throw new UnexpectedError()
     }
   }

@@ -1,24 +1,36 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
-import { AppModule } from 'main/routes/app.module'
+import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
+import { HttpStatusCode } from 'presentation/protocols/http'
+import { checkIfObjectKeyExist } from './helpers'
 
 describe('Users Route (e2e)', () => {
-  let app: INestApplication
+  const url = 'http://localhost:3000'
+  const path = '/users'
 
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile()
+  describe('POST /users', () => {
+    it('should respond user data', () => {
+      const params = mockUserCreaterParams()
 
-    app = moduleFixture.createNestApplication()
-    await app.init()
-  })
+      return request(url)
+        .post(path)
+        .send(params)
+        .expect(HttpStatusCode.CREATED)
+        .expect((res) => {
+          checkIfObjectKeyExist(res.body, 'data')
+        })
+    })
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!')
+    it('should respond bad request if request is missing params', () => {
+      const params = mockUserCreaterParams()
+      delete params.name
+
+      return request(url)
+        .post(path)
+        .send(params)
+        .expect(HttpStatusCode.BAD_REQUEST)
+        .expect((res) => {
+          checkIfObjectKeyExist(res.body, 'errors')
+        })
+    })
   })
 })
