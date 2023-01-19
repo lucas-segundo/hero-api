@@ -50,8 +50,10 @@ describe('UserCreationController', () => {
 
     const response = await sut.handle(params)
 
+    const userCopy = { ...user }
+    delete userCopy.passwordHashed
     const httpResponse: HttpResponse = {
-      data: user,
+      data: userCopy,
       statusCode: HttpStatusCode.CREATED,
     }
 
