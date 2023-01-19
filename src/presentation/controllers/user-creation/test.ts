@@ -63,7 +63,7 @@ describe('UserCreationController', () => {
     params.email = undefined
     const response = await sut.handle(params)
     const expectedResponse: HttpErrorResponse = {
-      errors: [new MissingParamError('email')],
+      errors: [new MissingParamError('email').message],
       statusCode: HttpStatusCode.BAD_REQUEST,
     }
 
@@ -77,7 +77,7 @@ describe('UserCreationController', () => {
 
     const response = await sut.handle(params)
     const expectedResponse: HttpErrorResponse = {
-      errors: [new UnexpectedError()],
+      errors: [new UnexpectedError().message],
       statusCode: HttpStatusCode.SERVER_ERROR,
     }
 

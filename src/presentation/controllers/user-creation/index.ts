@@ -17,9 +17,9 @@ export class UserCreationController implements Controller {
     const errors = []
 
     const { name, email, password } = params
-    !name && errors.push(new MissingParamError('name'))
-    !email && errors.push(new MissingParamError('email'))
-    !password && errors.push(new MissingParamError('password'))
+    !name && errors.push(new MissingParamError('name').message)
+    !email && errors.push(new MissingParamError('email').message)
+    !password && errors.push(new MissingParamError('password').message)
 
     if (errors.length) {
       return {
@@ -37,7 +37,7 @@ export class UserCreationController implements Controller {
       }
     } catch (error) {
       return {
-        errors: [new UnexpectedError()],
+        errors: [new UnexpectedError().message],
         statusCode: HttpStatusCode.SERVER_ERROR,
       }
     }
