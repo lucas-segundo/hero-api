@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { UnexpectedError } from 'app/errors/unexpected-error'
-import { EncrypterParams } from 'app/protocols/encrypter'
-import { mockEncrypter } from 'app/protocols/encrypter/mock'
+import { HasherParams } from 'app/protocols/hasher'
+import { mockHasher } from 'app/protocols/hasher/mock'
 import { UserCreaterRepositoryParams } from 'app/protocols/user-creater-repository'
 import { mockUserCreaterRepository } from 'app/protocols/user-creater-repository/mock'
 import { User } from 'domain/models/user'
@@ -11,34 +11,34 @@ import { DbUserCreater } from '.'
 
 const makeSut = () => {
   const userCreaterRepository = mockUserCreaterRepository()
-  const encrypter = mockEncrypter()
-  const sut = new DbUserCreater(userCreaterRepository, encrypter)
+  const hasher = mockHasher()
+  const sut = new DbUserCreater(userCreaterRepository, hasher)
   const params: UserCreaterParams = mockUserCreaterParams()
 
   return {
     sut,
     params,
     userCreaterRepository,
-    encrypter,
+    hasher,
   }
 }
 
 describe('DbUserCreater', () => {
-  it('should call encrypter with right params', async () => {
-    const { sut, params, encrypter } = makeSut()
+  it('should call hasher with right params', async () => {
+    const { sut, params, hasher } = makeSut()
 
     await sut.create(params)
 
-    const encrypterParams: EncrypterParams = {
+    const hasherParams: HasherParams = {
       value: params.password,
     }
-    expect(encrypter.encrypt).toBeCalledWith(encrypterParams)
+    expect(hasher.hash).toBeCalledWith(hasherParams)
   })
 
   it('should call user creater repository with right params', async () => {
-    const { sut, params, userCreaterRepository, encrypter } = makeSut()
+    const { sut, params, userCreaterRepository, hasher } = makeSut()
     const passwordHashed = faker.datatype.uuid()
-    encrypter.encrypt.mockResolvedValueOnce(passwordHashed)
+    hasher.hash.mockResolvedValueOnce(passwordHashed)
 
     await sut.create(params)
 
@@ -51,10 +51,10 @@ describe('DbUserCreater', () => {
   })
 
   it('should return the user data after creation', async () => {
-    const { sut, params, userCreaterRepository, encrypter } = makeSut()
+    const { sut, params, userCreaterRepository, hasher } = makeSut()
 
     const passwordHashed = faker.datatype.uuid()
-    encrypter.encrypt.mockResolvedValueOnce(passwordHashed)
+    hasher.hash.mockResolvedValueOnce(passwordHashed)
 
     const userCreated: User = {
       id: faker.datatype.uuid(),
@@ -78,9 +78,9 @@ describe('DbUserCreater', () => {
     await expect(modelData).rejects.toThrowError(UnexpectedError)
   })
 
-  it('should handle error if encrypter throws', async () => {
-    const { sut, params, encrypter } = makeSut()
-    encrypter.encrypt.mockRejectedValueOnce(new Error())
+  it('should handle error if hasher throws', async () => {
+    const { sut, params, hasher } = makeSut()
+    hasher.hash.mockRejectedValueOnce(new Error())
 
     const modelData = sut.create(params)
 
