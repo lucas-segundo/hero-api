@@ -15,6 +15,7 @@ export class DbUserAuthentication implements UserAuthentication {
 
   async auth({
     email,
+    password,
   }: UserAuthenticationParams): Promise<UserAuthenticationResult> {
     const user = await this.userFinderRepository.find({
       by: 'email',
@@ -24,6 +25,11 @@ export class DbUserAuthentication implements UserAuthentication {
     if (!user) {
       throw new DataNotFoundError('User')
     }
+
+    await this.hashComparer.compare({
+      hashedValue: user.passwordHashed,
+      value: password,
+    })
 
     return null
   }
