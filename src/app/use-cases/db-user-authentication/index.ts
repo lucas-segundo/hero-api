@@ -1,4 +1,5 @@
 import { DataNotFoundError } from 'app/errors/data-not-found-error'
+import { WrongPasswordError } from 'app/errors/wrong-password-error'
 import { HashComparer } from 'app/protocols/hash-comparer'
 import { UserFinderRepository } from 'app/protocols/user-finder-repository'
 import {
@@ -26,10 +27,14 @@ export class DbUserAuthentication implements UserAuthentication {
       throw new DataNotFoundError('User')
     }
 
-    await this.hashComparer.compare({
+    const isEqual = await this.hashComparer.compare({
       hashedValue: user.passwordHashed,
       value: password,
     })
+
+    if (!isEqual) {
+      throw new WrongPasswordError()
+    }
 
     return null
   }
