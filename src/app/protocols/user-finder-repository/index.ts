@@ -6,5 +6,5 @@ export type UserFinderRepositoryParams = {
 }
 
 export interface UserFinderRepository {
-  find(params: UserFinderRepositoryParams): Promise<User>
+  find(params: UserFinderRepositoryParams): Promise<User | undefined>
 }
