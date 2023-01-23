@@ -1,5 +1,6 @@
 import { DataNotFoundError } from 'app/errors/data-not-found-error'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
+import { Encrypter } from 'app/protocols/encrypter'
 import { HashComparer } from 'app/protocols/hash-comparer'
 import { UserFinderRepository } from 'app/protocols/user-finder-repository'
 import {
@@ -11,7 +12,8 @@ import {
 export class DbUserAuthentication implements UserAuthentication {
   constructor(
     private userFinderRepository: UserFinderRepository,
-    private hashComparer: HashComparer
+    private hashComparer: HashComparer,
+    private encrypter: Encrypter
   ) {}
 
   async auth({
@@ -35,6 +37,11 @@ export class DbUserAuthentication implements UserAuthentication {
     if (!isEqual) {
       throw new WrongPasswordError()
     }
+
+    const { id } = user
+    await this.encrypter.encrypt({
+      payload: { id },
+    })
 
     return null
   }
