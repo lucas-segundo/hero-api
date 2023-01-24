@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { UserAuthenticationParams } from 'domain/use-cases/user-authentication'
 import {
   mockAuthenticatedUser,
@@ -74,6 +75,25 @@ describe('UserAuthenticationController', () => {
       },
       statusCode: HttpStatusCode.OK,
     }
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should return unexpected error if something wrong happens', async () => {
+    const { sut, userAuthentication } = makeSut()
+
+    userAuthentication.auth.mockRejectedValueOnce(new Error())
+
+    const params: UserAuthenticationParams = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    }
+
+    const response = await sut.handle(params)
+    const expectedResponse: HttpErrorResponse = {
+      errors: [new UnexpectedError().message],
+      statusCode: HttpStatusCode.SERVER_ERROR,
+    }
+
     expect(response).toEqual(expectedResponse)
   })
 })
