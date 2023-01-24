@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { User } from 'domain/models/user'
 import { UserCreaterParams } from 'domain/use-cases/user-creater'
@@ -65,6 +66,21 @@ describe('UserCreationController', () => {
     const expectedResponse: HttpErrorResponse = {
       errors: [new MissingParamError('email').message],
       statusCode: HttpStatusCode.BAD_REQUEST,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should handle known error', async () => {
+    const { sut, params, userCreater } = makeSut()
+
+    const error = new KnownError(faker.random.words())
+    userCreater.create.mockRejectedValueOnce(error)
+
+    const response = await sut.handle(params)
+    const expectedResponse: HttpErrorResponse = {
+      errors: [error.message],
+      statusCode: HttpStatusCode.SERVER_ERROR,
     }
 
     expect(response).toEqual(expectedResponse)
