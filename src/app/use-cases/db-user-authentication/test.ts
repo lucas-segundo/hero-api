@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker'
-import { DataNotFoundError } from 'domain/errors/data-not-found-error'
+import { DataNotFoundError } from 'app/errors/data-not-found-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
-import { WrongPasswordError } from 'domain/errors/wrong-password-error'
 import { mockDbUser } from 'app/models/db-user/mock'
 import { EncrypterParams } from 'app/protocols/encrypter'
 import { mockEncrypter } from 'app/protocols/encrypter/mock'
@@ -12,6 +11,7 @@ import { mockUserFinderRepository } from 'app/protocols/user-finder-repository/m
 import { AuthenticatedUser } from 'domain/use-cases/user-authentication'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
 import { DbUserAuthentication } from '.'
+import { WrongPasswordError } from 'app/errors/wrong-password-error'
 
 const makeSut = () => {
   const userFinderRepository = mockUserFinderRepository()

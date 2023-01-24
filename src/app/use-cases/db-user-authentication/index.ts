@@ -1,7 +1,6 @@
 import { KnownError } from 'domain/errors/known-error'
-import { DataNotFoundError } from 'domain/errors/data-not-found-error'
+import { DataNotFoundError } from 'app/errors/data-not-found-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
-import { WrongPasswordError } from 'domain/errors/wrong-password-error'
 import { Encrypter } from 'app/protocols/encrypter'
 import { HashComparer } from 'app/protocols/hash-comparer'
 import { UserFinderRepository } from 'app/protocols/user-finder-repository'
@@ -10,6 +9,7 @@ import {
   UserAuthentication,
   UserAuthenticationParams,
 } from 'domain/use-cases/user-authentication'
+import { WrongPasswordError } from 'app/errors/wrong-password-error'
 
 export class DbUserAuthentication implements UserAuthentication {
   constructor(

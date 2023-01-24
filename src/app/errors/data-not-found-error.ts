@@ -1,4 +1,4 @@
-import { KnownError } from './known-error'
+import { KnownError } from 'domain/errors/known-error'
 
 export class DataNotFoundError extends KnownError {
   constructor(name: string) {
