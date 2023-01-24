@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { DataNotFoundError } from 'app/errors/data-not-found-error'
+import { UnexpectedError } from 'app/errors/unexpected-error'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
 import { mockDbUser } from 'app/models/db-user/mock'
 import { EncrypterParams } from 'app/protocols/encrypter'
@@ -124,5 +125,16 @@ describe('DbUserAuthentication', () => {
     }
 
     expect(aduthenticatedUser).toEqual(expectedAduthenticatedUser)
+  })
+
+  it('should throw unexpected error if encrypter throws', async () => {
+    const { sut, encrypter, resolveDependencies } = makeSut()
+
+    encrypter.encrypt.mockRejectedValueOnce(new Error())
+    resolveDependencies()
+
+    const result = sut.auth(mockUserAuthenticationParams())
+
+    await expect(result).rejects.toThrowError(new UnexpectedError())
   })
 })
