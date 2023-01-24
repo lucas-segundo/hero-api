@@ -1,4 +1,5 @@
 import { DataNotFoundError } from 'app/errors/data-not-found-error'
+import { UnexpectedError } from 'app/errors/unexpected-error'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
 import { Encrypter } from 'app/protocols/encrypter'
 import { HashComparer } from 'app/protocols/hash-comparer'
@@ -39,13 +40,16 @@ export class DbUserAuthentication implements UserAuthentication {
     }
 
     const { id } = user
-    const token = await this.encrypter.encrypt({
-      payload: { id },
-    })
-
-    return {
-      token,
-      user,
+    try {
+      const token = await this.encrypter.encrypt({
+        payload: { id },
+      })
+      return {
+        token,
+        user,
+      }
+    } catch (error) {
+      throw new UnexpectedError()
     }
   }
 }
