@@ -1,4 +1,4 @@
-import { UnexpectedError } from 'app/errors/unexpected-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { Hasher } from 'app/protocols/hasher'
 import { UserCreaterRepository } from 'app/protocols/user-creater-repository'
 import { User } from 'domain/models/user'

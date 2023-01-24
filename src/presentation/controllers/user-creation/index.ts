@@ -1,4 +1,4 @@
-import { UnexpectedError } from 'app/errors/unexpected-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
 import { Controller } from 'presentation/protocols/controller'

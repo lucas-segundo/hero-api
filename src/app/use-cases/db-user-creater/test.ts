@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { UnexpectedError } from 'app/errors/unexpected-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { HasherParams } from 'app/protocols/hasher'
 import { mockHasher } from 'app/protocols/hasher/mock'
 import { UserCreaterRepositoryParams } from 'app/protocols/user-creater-repository'

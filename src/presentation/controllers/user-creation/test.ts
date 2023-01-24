@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { UnexpectedError } from 'app/errors/unexpected-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { User } from 'domain/models/user'
 import { UserCreaterParams } from 'domain/use-cases/user-creater'
 import { mockUserCreater } from 'domain/use-cases/user-creater/mock'
