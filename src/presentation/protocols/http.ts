@@ -1,5 +1,5 @@
-export type HttpResponse = {
-  data: any
+export type HttpResponse<Data = any> = {
+  data: Data
   statusCode: number
 }
 

@@ -1,4 +1,5 @@
 import {
+  AuthenticatedUser,
   UserAuthentication,
   UserAuthenticationParams,
 } from 'domain/use-cases/user-authentication'
@@ -15,7 +16,7 @@ export class UserAuthenticationController implements Controller {
 
   async handle(
     params: UserAuthenticationParams
-  ): Promise<HttpResponse | HttpErrorResponse> {
+  ): Promise<HttpResponse<AuthenticatedUser> | HttpErrorResponse> {
     const errors = []
 
     const { email, password } = params
@@ -29,7 +30,10 @@ export class UserAuthenticationController implements Controller {
       }
     }
 
-    await this.userAuthentication.auth(params)
-    return null
+    const authenticatedUser = await this.userAuthentication.auth(params)
+    return {
+      data: authenticatedUser,
+      statusCode: HttpStatusCode.OK,
+    }
   }
 }

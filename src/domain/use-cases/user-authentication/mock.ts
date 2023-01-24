@@ -19,3 +19,8 @@ export const mockUserAuthenticationResult = (): AuthenticatedUser => ({
   token: faker.datatype.uuid(),
   user: mockUser(),
 })
+
+export const mockAuthenticatedUser = (): AuthenticatedUser => ({
+  token: faker.datatype.uuid(),
+  user: mockUser(),
+})
