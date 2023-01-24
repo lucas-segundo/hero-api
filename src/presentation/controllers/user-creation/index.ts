@@ -1,3 +1,4 @@
+import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
@@ -36,9 +37,17 @@ export class UserCreationController implements Controller {
         statusCode: HttpStatusCode.CREATED,
       }
     } catch (error) {
+      const statusCode = HttpStatusCode.SERVER_ERROR
+      if (error instanceof KnownError) {
+        return {
+          errors: [error.message],
+          statusCode,
+        }
+      }
+
       return {
         errors: [new UnexpectedError().message],
-        statusCode: HttpStatusCode.SERVER_ERROR,
+        statusCode,
       }
     }
   }
