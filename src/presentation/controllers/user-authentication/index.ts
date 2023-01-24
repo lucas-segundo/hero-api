@@ -1,3 +1,4 @@
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import {
   AuthenticatedUser,
   UserAuthentication,
@@ -30,10 +31,19 @@ export class UserAuthenticationController implements Controller {
       }
     }
 
-    const authenticatedUser = await this.userAuthentication.auth(params)
-    return {
-      data: authenticatedUser,
-      statusCode: HttpStatusCode.OK,
+    try {
+      const authenticatedUser = await this.userAuthentication.auth(params)
+      return {
+        data: authenticatedUser,
+        statusCode: HttpStatusCode.OK,
+      }
+    } catch (error) {
+      errors.push(new UnexpectedError().message)
+
+      return {
+        errors,
+        statusCode: HttpStatusCode.SERVER_ERROR,
+      }
     }
   }
 }
