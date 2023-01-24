@@ -1,3 +1,4 @@
+import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import {
   AuthenticatedUser,
@@ -38,7 +39,11 @@ export class UserAuthenticationController implements Controller {
         statusCode: HttpStatusCode.OK,
       }
     } catch (error) {
-      errors.push(new UnexpectedError().message)
+      if (error instanceof KnownError) {
+        errors.push(error.message)
+      } else {
+        errors.push(new UnexpectedError().message)
+      }
 
       return {
         errors,
