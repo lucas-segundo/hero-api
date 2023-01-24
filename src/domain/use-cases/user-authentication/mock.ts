@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker'
 import { mockUser } from 'domain/models/user/mock'
 import {
+  AuthenticatedUser,
   UserAuthentication,
   UserAuthenticationParams,
-  UserAuthenticationResult,
 } from '.'
 
 export const mockUserAuthentication = (): jest.Mocked<UserAuthentication> => ({
@@ -15,7 +15,7 @@ export const mockUserAuthenticationParams = (): UserAuthenticationParams => ({
   password: faker.internet.password(),
 })
 
-export const mockUserAuthenticationResult = (): UserAuthenticationResult => ({
+export const mockUserAuthenticationResult = (): AuthenticatedUser => ({
   token: faker.datatype.uuid(),
   user: mockUser(),
 })

@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { DataNotFoundError } from 'app/errors/data-not-found-error'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
 import { mockDbUser } from 'app/models/db-user/mock'
@@ -7,6 +8,7 @@ import { HashComparerParams } from 'app/protocols/hash-comparer'
 import { mockHashComparer } from 'app/protocols/hash-comparer/mock'
 import { UserFinderRepositoryParams } from 'app/protocols/user-finder-repository'
 import { mockUserFinderRepository } from 'app/protocols/user-finder-repository/mock'
+import { AuthenticatedUser } from 'domain/use-cases/user-authentication'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
 import { DbUserAuthentication } from '.'
 
@@ -105,5 +107,22 @@ describe('DbUserAuthentication', () => {
     }
 
     expect(encrypter.encrypt).toBeCalledWith(encrypterParams)
+  })
+
+  it('should return authenticated user', async () => {
+    const { sut, encrypter, resolveDependencies, user } = makeSut()
+
+    const token = faker.datatype.uuid()
+    encrypter.encrypt.mockResolvedValueOnce(token)
+    resolveDependencies()
+
+    const aduthenticatedUser = await sut.auth(mockUserAuthenticationParams())
+
+    const expectedAduthenticatedUser: AuthenticatedUser = {
+      token,
+      user,
+    }
+
+    expect(aduthenticatedUser).toEqual(expectedAduthenticatedUser)
   })
 })

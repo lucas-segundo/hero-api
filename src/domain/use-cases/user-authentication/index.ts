@@ -5,11 +5,11 @@ export type UserAuthenticationParams = {
   password: string
 }
 
-export type UserAuthenticationResult = {
+export type AuthenticatedUser = {
   token: string
   user: User
 }
 
 export interface UserAuthentication {
-  auth(params: UserAuthenticationParams): Promise<UserAuthenticationResult>
+  auth(params: UserAuthenticationParams): Promise<AuthenticatedUser>
 }

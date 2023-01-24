@@ -4,9 +4,9 @@ import { Encrypter } from 'app/protocols/encrypter'
 import { HashComparer } from 'app/protocols/hash-comparer'
 import { UserFinderRepository } from 'app/protocols/user-finder-repository'
 import {
+  AuthenticatedUser,
   UserAuthentication,
   UserAuthenticationParams,
-  UserAuthenticationResult,
 } from 'domain/use-cases/user-authentication'
 
 export class DbUserAuthentication implements UserAuthentication {
@@ -19,7 +19,7 @@ export class DbUserAuthentication implements UserAuthentication {
   async auth({
     email,
     password,
-  }: UserAuthenticationParams): Promise<UserAuthenticationResult> {
+  }: UserAuthenticationParams): Promise<AuthenticatedUser> {
     const user = await this.userFinderRepository.find({
       by: 'email',
       value: email,
@@ -39,10 +39,13 @@ export class DbUserAuthentication implements UserAuthentication {
     }
 
     const { id } = user
-    await this.encrypter.encrypt({
+    const token = await this.encrypter.encrypt({
       payload: { id },
     })
 
-    return null
+    return {
+      token,
+      user,
+    }
   }
 }
