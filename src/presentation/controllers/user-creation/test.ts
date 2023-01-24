@@ -44,14 +44,12 @@ describe('UserCreationController', () => {
       id: faker.datatype.uuid(),
       name: params.name,
       email: params.email,
-      passwordHashed: params.password,
     }
     userCreater.create.mockResolvedValueOnce(user)
 
     const response = await sut.handle(params)
 
     const userCopy = { ...user }
-    delete userCopy.passwordHashed
     const httpResponse: HttpResponse = {
       data: userCopy,
       statusCode: HttpStatusCode.CREATED,

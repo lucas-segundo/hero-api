@@ -60,7 +60,6 @@ describe('DbUserCreater', () => {
       id: faker.datatype.uuid(),
       email: params.email,
       name: params.name,
-      passwordHashed: passwordHashed,
     }
     userCreaterRepository.create.mockResolvedValueOnce(userCreated)
 
