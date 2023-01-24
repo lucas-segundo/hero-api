@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { UserAuthenticationParams } from 'domain/use-cases/user-authentication'
 import {
@@ -91,6 +92,26 @@ describe('UserAuthenticationController', () => {
     const response = await sut.handle(params)
     const expectedResponse: HttpErrorResponse = {
       errors: [new UnexpectedError().message],
+      statusCode: HttpStatusCode.SERVER_ERROR,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should return known error if it happens', async () => {
+    const { sut, userAuthentication } = makeSut()
+
+    const error = new KnownError(faker.random.words())
+    userAuthentication.auth.mockRejectedValueOnce(error)
+
+    const params: UserAuthenticationParams = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    }
+
+    const response = await sut.handle(params)
+    const expectedResponse: HttpErrorResponse = {
+      errors: [error.message],
       statusCode: HttpStatusCode.SERVER_ERROR,
     }
 
