@@ -1,5 +1,5 @@
 import { DbUserCreater } from 'app/use-cases/db-user-creater'
-import { BcryptHasher } from 'infra/bcrypt'
+import { BcryptHasher } from 'infra/bcrypt/hasher'
 import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
 import { KnexUserCreaterRepository } from 'infra/knex/repositories/user-creater'
 
