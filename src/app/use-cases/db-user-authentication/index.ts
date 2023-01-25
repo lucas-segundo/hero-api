@@ -10,6 +10,7 @@ import {
   UserAuthenticationParams,
 } from 'domain/use-cases/user-authentication'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
+import { User } from 'domain/models/user'
 
 export class DbUserAuthentication implements UserAuthentication {
   constructor(
@@ -23,11 +24,16 @@ export class DbUserAuthentication implements UserAuthentication {
     password,
   }: UserAuthenticationParams): Promise<AuthenticatedUser> {
     try {
-      const user = await this.findUser(email)
+      const { passwordHashed, id, name } = await this.findUser(email)
 
-      await this.checkIfPasswordIsRight(user.passwordHashed, password)
+      await this.checkIfPasswordIsRight(passwordHashed, password)
 
-      const token = await this.createToken(user.id)
+      const token = await this.createToken(id)
+      const user: User = {
+        id,
+        email,
+        name,
+      }
 
       return {
         token,

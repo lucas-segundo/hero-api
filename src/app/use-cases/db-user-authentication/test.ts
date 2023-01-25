@@ -12,6 +12,7 @@ import { AuthenticatedUser } from 'domain/use-cases/user-authentication'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
 import { DbUserAuthentication } from '.'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
+import { User } from 'domain/models/user'
 
 const makeSut = () => {
   const userFinderRepository = mockUserFinderRepository()
@@ -23,10 +24,10 @@ const makeSut = () => {
     encrypter
   )
 
-  const user = mockDbUser()
+  const dbUser = mockDbUser()
 
-  const resolveDependencies = (userMocked = user) => {
-    userFinderRepository.find.mockResolvedValueOnce(userMocked)
+  const resolveDependencies = () => {
+    userFinderRepository.find.mockResolvedValueOnce(dbUser)
     hashComparer.compare.mockResolvedValueOnce(true)
   }
 
@@ -36,12 +37,12 @@ const makeSut = () => {
     hashComparer,
     encrypter,
     resolveDependencies,
-    user,
+    dbUser,
   }
 }
 
 describe('DbUserAuthentication', () => {
-  it('should call user finder with right params', async () => {
+  it('should call dbUser finder with right params', async () => {
     const { sut, userFinderRepository, resolveDependencies } = makeSut()
 
     resolveDependencies()
@@ -56,7 +57,7 @@ describe('DbUserAuthentication', () => {
     expect(userFinderRepository.find).toBeCalledWith(expectedParams)
   })
 
-  it('should throw error if user doesnt exist', async () => {
+  it('should throw error if dbUser doesnt exist', async () => {
     const { sut, userFinderRepository } = makeSut()
     userFinderRepository.find.mockResolvedValueOnce(undefined)
 
@@ -67,15 +68,15 @@ describe('DbUserAuthentication', () => {
   })
 
   it('should call hash comparer with right params', async () => {
-    const { sut, resolveDependencies, hashComparer, user } = makeSut()
+    const { sut, resolveDependencies, hashComparer, dbUser } = makeSut()
 
-    resolveDependencies(user)
+    resolveDependencies()
 
     const params = mockUserAuthenticationParams()
     await sut.auth(params)
 
     const compareParams: HashComparerParams = {
-      hashedValue: user.passwordHashed,
+      hashedValue: dbUser.passwordHashed,
       value: params.password,
     }
     expect(hashComparer.compare).toBeCalledWith(compareParams)
@@ -94,13 +95,13 @@ describe('DbUserAuthentication', () => {
   })
 
   it('should call encrypter with right params', async () => {
-    const { sut, encrypter, resolveDependencies, user } = makeSut()
+    const { sut, encrypter, resolveDependencies, dbUser } = makeSut()
 
     resolveDependencies()
 
     await sut.auth(mockUserAuthenticationParams())
 
-    const { id } = user
+    const { id } = dbUser
     const encrypterParams: EncrypterParams = {
       payload: {
         id,
@@ -110,15 +111,24 @@ describe('DbUserAuthentication', () => {
     expect(encrypter.encrypt).toBeCalledWith(encrypterParams)
   })
 
-  it('should return authenticated user', async () => {
-    const { sut, encrypter, resolveDependencies, user } = makeSut()
+  it('should return authenticated dbUser', async () => {
+    const { sut, encrypter, resolveDependencies, dbUser } = makeSut()
 
     const token = faker.datatype.uuid()
     encrypter.encrypt.mockResolvedValueOnce(token)
     resolveDependencies()
 
-    const aduthenticatedUser = await sut.auth(mockUserAuthenticationParams())
+    const { id, email, name } = dbUser
+    const aduthenticatedUser = await sut.auth({
+      email,
+      password: faker.internet.password(),
+    })
 
+    const user: User = {
+      id,
+      email,
+      name,
+    }
     const expectedAduthenticatedUser: AuthenticatedUser = {
       token,
       user,
