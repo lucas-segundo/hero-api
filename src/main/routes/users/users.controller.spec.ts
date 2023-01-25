@@ -3,8 +3,6 @@ import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
 import { mockUsersModule } from './factory.module'
 import { UsersController } from './users.controller'
 import { UsersService } from './users.service'
-import { createMock } from '@golevelup/ts-jest'
-import { Response } from 'express'
 import {
   HttpErrorResponse,
   HttpResponse,
@@ -12,12 +10,7 @@ import {
 } from 'presentation/protocols/http'
 import { mockUser } from 'domain/models/user/mock'
 import { faker } from '@faker-js/faker'
-
-const mockResponse = () =>
-  createMock<Response>({
-    status: jest.fn().mockReturnThis(),
-    send: jest.fn(),
-  })
+import { mockExpressResponse } from 'main/helpers/mock-express-response'
 
 describe('UsersController', () => {
   let controller: UsersController
@@ -39,7 +32,7 @@ describe('UsersController', () => {
   it('should call create user with right params', async () => {
     const createSpy = jest.spyOn(userService, 'create')
 
-    const res = mockResponse()
+    const res = mockExpressResponse()
     const params = mockUserCreaterParams()
     await controller.create(params, res)
 
@@ -54,7 +47,7 @@ describe('UsersController', () => {
     }
     createSpy.mockResolvedValueOnce(result)
 
-    const res = mockResponse()
+    const res = mockExpressResponse()
     const params = mockUserCreaterParams()
     await controller.create(params, res)
 
@@ -72,7 +65,7 @@ describe('UsersController', () => {
     }
     createSpy.mockResolvedValueOnce(result)
 
-    const res = mockResponse()
+    const res = mockExpressResponse()
     const params = mockUserCreaterParams()
     await controller.create(params, res)
 
