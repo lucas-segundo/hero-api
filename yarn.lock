@@ -3703,6 +3703,13 @@ kleur@^3.0.3:
   resolved "https://registry.npmjs.org/kleur/-/kleur-3.0.3.tgz"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
+knex-stringcase@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/knex-stringcase/-/knex-stringcase-1.4.6.tgz#e10f9201bc34de66386cc08525532012ebfd9e44"
+  integrity sha512-8YJafQWJqF0REx6OYKem4UBBY75RD+ZvENcWAufz/afc9MOBGjFyr70EPBy59y6LqoPzSmCdUV+qWO550B3lJg==
+  dependencies:
+    stringcase "^4.3.1"
+
 knex@^2.4.0:
   version "2.4.0"
   resolved "https://registry.npmjs.org/knex/-/knex-2.4.0.tgz"
@@ -4995,6 +5002,11 @@ string_decoder@~1.1.1:
   integrity sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==
   dependencies:
     safe-buffer "~5.1.0"
+
+stringcase@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/stringcase/-/stringcase-4.3.1.tgz#54279c9dd7379ff50f4e47d50d036b2ac888d34b"
+  integrity sha512-Ov7McNX1sFaEX9NWijD1hIOVDDhKdnFzN9tvoa1N8xgrclouhsO4kBPVrTPhjO/zP5mn1Ww03uZ2SThNMXS7zg==
 
 strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
