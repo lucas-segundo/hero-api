@@ -24,9 +24,9 @@ describe('KnexUserFinderRepository', () => {
     const userToInsert = mockDbUser()
     delete userToInsert.id
 
-    const userId = await KnexDbHandler.client.insert(userToInsert).into('users')
+    const ids = await KnexDbHandler.client.insert(userToInsert).into('users')
     expectedDbUser = {
-      id: userId[0],
+      id: ids[0],
       ...userToInsert,
     }
   })
