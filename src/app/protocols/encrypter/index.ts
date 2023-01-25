@@ -1,5 +1,5 @@
 export type EncrypterParams = {
-  payload: any
+  payload: Record<string, any>
 }
 
 export interface Encrypter {
