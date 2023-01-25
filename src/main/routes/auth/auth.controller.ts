@@ -1,4 +1,6 @@
-import { Controller, Post, Body } from '@nestjs/common'
+import { Controller, Post, Body, Res } from '@nestjs/common'
+import { Response } from 'express'
+import { handleResponse } from 'main/helpers/handle-response'
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto/auth.dto'
 
@@ -7,7 +9,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  auth(@Body() authDto: AuthDto) {
-    return this.authService.auth(authDto)
+  async auth(@Body() authDto: AuthDto, @Res() res: Response) {
+    const result = await this.authService.auth(authDto)
+
+    handleResponse(res, result)
   }
 }
