@@ -1,11 +1,13 @@
 import knex, { Knex } from 'knex'
 import { knexEnvs } from '../envs'
+import * as knexStringcase from 'knex-stringcase'
 
 export const KnexDbHandler = {
   client: null as Knex,
 
   async connect(env: keyof typeof knexEnvs) {
-    this.client = knex(knexEnvs[env])
+    const options = knexStringcase(knexEnvs[env])
+    this.client = knex(options)
   },
 
   async migrateLatest() {
