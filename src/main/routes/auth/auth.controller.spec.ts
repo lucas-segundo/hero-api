@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { Test, TestingModule } from '@nestjs/testing'
 import { AuthenticatedUser } from 'domain/use-cases/user-authentication'
 import {
@@ -5,7 +6,11 @@ import {
   mockUserAuthenticationParams,
 } from 'domain/use-cases/user-authentication/mock'
 import { mockExpressResponse } from 'main/helpers/mock-express-response'
-import { HttpResponse, HttpStatusCode } from 'presentation/protocols/http'
+import {
+  HttpErrorResponse,
+  HttpResponse,
+  HttpStatusCode,
+} from 'presentation/protocols/http'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { mockUserAuthModule } from './mock.module'
@@ -28,29 +33,47 @@ describe('AuthController', () => {
   })
 
   it('should call auth with right params', async () => {
-    const serviceAuthSpy = jest.spyOn(service, 'auth')
+    const authSpy = jest.spyOn(service, 'auth')
     const res = mockExpressResponse()
 
-    const authDto = mockUserAuthenticationParams()
-    await controller.auth(authDto, res)
+    const dto = mockUserAuthenticationParams()
+    await controller.auth(dto, res)
 
-    expect(serviceAuthSpy).toBeCalledWith(authDto)
+    expect(authSpy).toBeCalledWith(dto)
   })
 
   it('should respond with right data', async () => {
-    const serviceAuthSpy = jest.spyOn(service, 'auth')
+    const authSpy = jest.spyOn(service, 'auth')
     const res = mockExpressResponse()
 
     const response: HttpResponse<AuthenticatedUser> = {
       data: mockAuthenticatedUser(),
       statusCode: HttpStatusCode.OK,
     }
-    serviceAuthSpy.mockResolvedValueOnce(response)
+    authSpy.mockResolvedValueOnce(response)
 
-    const authDto = mockUserAuthenticationParams()
-    await controller.auth(authDto, res)
+    const dto = mockUserAuthenticationParams()
+    await controller.auth(dto, res)
 
     expect(res.status).toBeCalledWith(response.statusCode)
     expect(res.send).toBeCalledWith({ data: response.data })
+  })
+
+  it('should respond with right errors if something fails', async () => {
+    const authSpy = jest.spyOn(service, 'auth')
+    const result: HttpErrorResponse = {
+      errors: [faker.random.words()],
+      statusCode: faker.internet.httpStatusCode({
+        types: ['serverError', 'clientError'],
+      }),
+    }
+    authSpy.mockResolvedValueOnce(result)
+
+    const res = mockExpressResponse()
+    const dto = mockUserAuthenticationParams()
+    await controller.auth(dto, res)
+
+    expect(res.status).toBeCalledWith(result.statusCode)
+    expect(res.send).toBeCalledWith({ errors: result.errors })
   })
 })
