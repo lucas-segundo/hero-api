@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
-import { AppModule } from './main/routes/app.module'
+import { AppModule } from './routes/app.module'
 
 async function bootstrap() {
   await KnexDbHandler.connect('dev')
