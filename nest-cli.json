@@ -1,4 +1,4 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src/infra/nestjs"
+  "sourceRoot": "src/main/routes"
 }
