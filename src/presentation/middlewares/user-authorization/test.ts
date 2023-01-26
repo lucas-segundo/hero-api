@@ -33,4 +33,16 @@ describe('UserAuthorizationMiddleware', () => {
     }
     expect(response).toEqual(expectedResponse)
   })
+
+  it('should return nothing if authorization returns true', async () => {
+    const userAuthorization = mockUserAuthorization()
+    const sut = new UserAuthorizationMiddleware(userAuthorization)
+
+    userAuthorization.auth.mockResolvedValueOnce(true)
+
+    const params = mockUserAuthorizationParams()
+    const result = await sut.handle(params)
+
+    expect(result).toBeUndefined()
+  })
 })
