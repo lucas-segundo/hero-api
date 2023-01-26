@@ -8,8 +8,12 @@ import {
 export class LocalUserAuthorization implements UserAuthorization {
   constructor(private dencrypter: Dencrypter) {}
   async auth(params: UserAuthorizationParams): Promise<boolean> {
-    const tokenPayload = await this.dencrypter.dencrypt<TokenPayload>(params)
+    try {
+      const tokenPayload = await this.dencrypter.dencrypt<TokenPayload>(params)
 
-    return !!tokenPayload
+      return !!tokenPayload
+    } catch (error) {
+      return false
+    }
   }
 }
