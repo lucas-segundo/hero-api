@@ -2,15 +2,15 @@ import {
   UserAuthorization,
   UserAuthorizationParams,
 } from 'domain/use-cases/user-authorization'
-import { Controller } from 'presentation/protocols/controller'
-import { HttpResponse, HttpErrorResponse } from 'presentation/protocols/http'
+import { HttpErrorResponse } from 'presentation/protocols/http'
+import { Middleware } from 'presentation/protocols/middleware'
 
-export class UserAuthorizationMiddleware implements Controller {
+export class UserAuthorizationMiddleware implements Middleware {
   constructor(private userAuthorization: UserAuthorization) {}
 
   async handle(
     params: UserAuthorizationParams
-  ): Promise<HttpResponse<any> | HttpErrorResponse> {
+  ): Promise<void | HttpErrorResponse> {
     await this.userAuthorization.auth(params)
 
     return
