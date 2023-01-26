@@ -10,7 +10,7 @@ import { UserFinderRepositoryParams } from 'app/protocols/user-finder-repository
 import { mockUserFinderRepository } from 'app/protocols/user-finder-repository/mock'
 import { AuthenticatedUser } from 'domain/use-cases/user-authentication'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
-import { DbUserAuthentication } from '.'
+import { LocalUserAuthentication } from '.'
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
 import { User } from 'domain/models/user'
 
@@ -18,7 +18,7 @@ const makeSut = () => {
   const userFinderRepository = mockUserFinderRepository()
   const hashComparer = mockHashComparer()
   const encrypter = mockEncrypter()
-  const sut = new DbUserAuthentication(
+  const sut = new LocalUserAuthentication(
     userFinderRepository,
     hashComparer,
     encrypter
@@ -41,7 +41,7 @@ const makeSut = () => {
   }
 }
 
-describe('DbUserAuthentication', () => {
+describe('LocalUserAuthentication', () => {
   it('should call dbUser finder with right params', async () => {
     const { sut, userFinderRepository, resolveDependencies } = makeSut()
 

@@ -1,4 +1,4 @@
-import { DbUserAuthentication } from 'app/use-cases/db-user-authentication'
+import { LocalUserAuthentication } from 'app/use-cases/local-user-authentication'
 import { BcryptHashComparer } from 'infra/bcrypt/hash-comparer'
 import { JwtEncrypter } from 'infra/jwt'
 import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
@@ -9,5 +9,5 @@ export const makeUserAuthentication = () => {
   const hashComparer = new BcryptHashComparer()
   const encrypter = new JwtEncrypter()
 
-  return new DbUserAuthentication(userAuthRepo, hashComparer, encrypter)
+  return new LocalUserAuthentication(userAuthRepo, hashComparer, encrypter)
 }

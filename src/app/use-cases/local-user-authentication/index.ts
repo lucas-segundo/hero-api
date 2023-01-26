@@ -12,7 +12,7 @@ import {
 import { WrongPasswordError } from 'app/errors/wrong-password-error'
 import { User } from 'domain/models/user'
 
-export class DbUserAuthentication implements UserAuthentication {
+export class LocalUserAuthentication implements UserAuthentication {
   constructor(
     private userFinderRepository: UserFinderRepository,
     private hashComparer: HashComparer,
