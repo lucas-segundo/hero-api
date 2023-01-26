@@ -13,7 +13,7 @@ import {
 } from 'presentation/protocols/http'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { mockUserAuthModule } from './mock.module'
+import { makeUserAuthModule } from './factory.module'
 
 describe('AuthController', () => {
   let controller: AuthController
@@ -21,7 +21,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule(
-      mockUserAuthModule()
+      makeUserAuthModule()
     ).compile()
 
     controller = module.get<AuthController>(AuthController)

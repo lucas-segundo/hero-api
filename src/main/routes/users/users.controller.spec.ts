@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
-import { mockUsersModule } from './factory.module'
 import { UsersController } from './users.controller'
 import { UsersService } from './users.service'
 import {
@@ -11,6 +10,7 @@ import {
 import { mockUser } from 'domain/models/user/mock'
 import { faker } from '@faker-js/faker'
 import { mockExpressResponse } from 'main/helpers/mock-express-response'
+import { makeUsersModule } from './factory.module'
 
 describe('UsersController', () => {
   let controller: UsersController
@@ -18,7 +18,7 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule(
-      mockUsersModule()
+      makeUsersModule()
     ).compile()
 
     userService = module.get<UsersService>(UsersService)
