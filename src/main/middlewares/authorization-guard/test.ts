@@ -1,6 +1,6 @@
 import { AuthorizationGuard } from '.'
 import { mockUserAuthMiddleware } from 'presentation/middlewares/user-authorization/mock'
-import { ExecutionContext } from '@nestjs/common'
+import { ExecutionContext, HttpException } from '@nestjs/common'
 import { createMock } from '@golevelup/ts-jest'
 import { faker } from '@faker-js/faker'
 import { mockHttpErrorResponse } from 'presentation/protocols/http/mock'
@@ -53,9 +53,10 @@ describe('AuthorizationGuard', () => {
 
   it('should throw error if request is not authorized', async () => {
     const userAuthMiddleware = mockUserAuthMiddleware()
+    const httpErrorResponse = mockHttpErrorResponse()
     jest
       .spyOn(userAuthMiddleware, 'handle')
-      .mockResolvedValueOnce(mockHttpErrorResponse())
+      .mockResolvedValueOnce(httpErrorResponse)
 
     const sut = new AuthorizationGuard(userAuthMiddleware)
 
@@ -68,6 +69,8 @@ describe('AuthorizationGuard', () => {
 
     const result = sut.canActivate(executionContext)
 
-    await expect(result).rejects.toThrowError()
+    await expect(result).rejects.toThrowError(
+      new HttpException(httpErrorResponse.errors, httpErrorResponse.statusCode)
+    )
   })
 })
