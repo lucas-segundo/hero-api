@@ -40,5 +40,15 @@ describe('Users Route (e2e)', () => {
           checkIfObjectKeyExist(res.body, 'errors')
         })
     })
+
+    it('should not allow request without token', () => {
+      const params = mockUserCreaterParams()
+      delete params.name
+
+      return request(url)
+        .post(path)
+        .send(params)
+        .expect(HttpStatusCode.UNAUTHORIZED)
+    })
   })
 })
