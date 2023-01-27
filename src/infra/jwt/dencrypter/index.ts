@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken'
 
 export class JwtDencrypter implements Dencrypter {
   async dencrypt<Data>({ token }: DencrypterParams): Promise<Data> {
-    jwt.verify(token, process.env.JWT_SECRET)
+    const tokenDecrypted = jwt.verify(token, process.env.JWT_SECRET)
 
-    return
+    return tokenDecrypted as Data
   }
 }
