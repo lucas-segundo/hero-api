@@ -21,8 +21,8 @@ describe('Users Route (e2e)', () => {
       return request(url)
         .post(path)
         .send({
-          email: userCreaterParams.email,
-          password: userCreaterParams.password,
+          email: 'lucas@gmail.com',
+          password: 'testas22',
         })
         .expect(HttpStatusCode.OK)
         .expect((res) => {
