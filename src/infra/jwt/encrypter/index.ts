@@ -7,6 +7,6 @@ export class JwtEncrypter implements Encrypter {
       expiresIn: 60 * 60,
     })
 
-    return token
+    return `Bearer ${token}`
   }
 }
