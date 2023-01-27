@@ -4,6 +4,8 @@ import { ExecutionContext, HttpException } from '@nestjs/common'
 import { createMock } from '@golevelup/ts-jest'
 import { faker } from '@faker-js/faker'
 import { mockHttpErrorResponse } from 'presentation/protocols/http/mock'
+import { MissingAuthToken } from 'presentation/errors/missing-auth-token'
+import { HttpErrorResponse } from 'presentation/protocols/http'
 
 const makeSut = () => {
   const userAuthMiddleware = mockUserAuthMiddleware()
@@ -71,6 +73,29 @@ describe('AuthorizationGuard', () => {
 
     await expect(result).rejects.toThrowError(
       new HttpException(httpErrorResponse.errors, httpErrorResponse.statusCode)
+    )
+  })
+
+  it('should throw error if token is missing', async () => {
+    const userAuthMiddleware = mockUserAuthMiddleware()
+    jest.spyOn(userAuthMiddleware, 'handle').mockResolvedValueOnce()
+
+    const sut = new AuthorizationGuard(userAuthMiddleware)
+
+    const executionContext = createMock<ExecutionContext>()
+    executionContext.switchToHttp().getRequest.mockReturnValueOnce({
+      headers: {},
+    })
+
+    const result = sut.canActivate(executionContext)
+
+    const missingError = new MissingAuthToken()
+    const httpErrorResponse: HttpErrorResponse = {
+      errors: [missingError.message],
+      statusCode: missingError.statusCode,
+    }
+    await expect(result).rejects.toThrowError(
+      new HttpException(httpErrorResponse, httpErrorResponse.statusCode)
     )
   })
 })
