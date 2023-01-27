@@ -14,8 +14,10 @@ export class AuthorizationGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext) {
-    const token = context.switchToHttp().getRequest<Request>()
+    const bearerToken = context.switchToHttp().getRequest<Request>()
       .headers.authorization
+
+    const [, token] = bearerToken.split(' ')
 
     const error = await this.userAuthorizationMiddleware.handle({ token })
 

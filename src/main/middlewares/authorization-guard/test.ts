@@ -5,18 +5,26 @@ import { createMock } from '@golevelup/ts-jest'
 import { faker } from '@faker-js/faker'
 import { mockHttpErrorResponse } from 'presentation/protocols/http/mock'
 
+const makeSut = () => {
+  const userAuthMiddleware = mockUserAuthMiddleware()
+  const sut = new AuthorizationGuard(userAuthMiddleware)
+
+  return {
+    userAuthMiddleware,
+    sut,
+  }
+}
+
 describe('AuthorizationGuard', () => {
   it('should call user auth with right params', async () => {
-    const userAuthMiddleware = mockUserAuthMiddleware()
+    const { userAuthMiddleware, sut } = makeSut()
     jest.spyOn(userAuthMiddleware, 'handle').mockResolvedValueOnce()
-
-    const sut = new AuthorizationGuard(userAuthMiddleware)
 
     const token = faker.datatype.uuid()
     const executionContext = createMock<ExecutionContext>()
     executionContext.switchToHttp().getRequest.mockReturnValueOnce({
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
       },
     })
 
@@ -31,11 +39,10 @@ describe('AuthorizationGuard', () => {
 
     const sut = new AuthorizationGuard(userAuthMiddleware)
 
-    const token = faker.datatype.uuid()
     const executionContext = createMock<ExecutionContext>()
     executionContext.switchToHttp().getRequest.mockReturnValueOnce({
       headers: {
-        authorization: token,
+        authorization: `Bearer ${faker.datatype.uuid()}`,
       },
     })
 
@@ -52,11 +59,10 @@ describe('AuthorizationGuard', () => {
 
     const sut = new AuthorizationGuard(userAuthMiddleware)
 
-    const token = faker.datatype.uuid()
     const executionContext = createMock<ExecutionContext>()
     executionContext.switchToHttp().getRequest.mockReturnValueOnce({
       headers: {
-        authorization: token,
+        authorization: `Bearer ${faker.datatype.uuid()}`,
       },
     })
 
