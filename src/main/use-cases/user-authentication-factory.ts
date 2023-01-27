@@ -1,6 +1,6 @@
 import { LocalUserAuthentication } from 'app/use-cases/local-user-authentication'
 import { BcryptHashComparer } from 'infra/bcrypt/hash-comparer'
-import { JwtEncrypter } from 'infra/jwt'
+import { JwtEncrypter } from 'infra/jwt/encrypter'
 import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
 import { KnexUserFinderRepository } from 'infra/knex/repositories/user-finder'
 
