@@ -33,7 +33,7 @@ describe('JwtEncrypter', () => {
     )
   })
 
-  it('should return jwt token', async () => {
+  it('should return bearer jwt token', async () => {
     const { sut, signSpy } = makeSut()
 
     const expectedToken = faker.datatype.uuid()
@@ -42,6 +42,6 @@ describe('JwtEncrypter', () => {
 
     const token = await sut.encrypt(params)
 
-    expect(token).toBe(expectedToken)
+    expect(token).toBe(`Bearer ${expectedToken}`)
   })
 })
