@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { KnownError } from 'domain/errors/known-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import {
   mockRaceCreated,
   mockRaceCreation,
@@ -88,6 +89,21 @@ describe('RaceCreationController', () => {
 
     const expectedResponse: HttpErrorResponse = {
       errors: [error.message],
+      statusCode: HttpStatusCode.SERVER_ERROR,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should respond with error if something wrong happens', async () => {
+    const { sut, raceCreation } = makeSut()
+    raceCreation.create.mockRejectedValueOnce(new Error())
+
+    const params = mockRaceCreationParams()
+    const response = await sut.handle(params)
+
+    const expectedResponse: HttpErrorResponse = {
+      errors: [new UnexpectedError().message],
       statusCode: HttpStatusCode.SERVER_ERROR,
     }
 
