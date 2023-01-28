@@ -3,7 +3,12 @@ import {
   mockRaceCreation,
   mockRaceCreationParams,
 } from 'domain/use-cases/race-creation/mock'
-import { HttpResponse, HttpStatusCode } from 'presentation/protocols/http'
+import { MissingParamError } from 'presentation/errors/missing-param-error'
+import {
+  HttpErrorResponse,
+  HttpResponse,
+  HttpStatusCode,
+} from 'presentation/protocols/http'
 import { RaceCreationController } from '.'
 
 const makeSut = () => {
@@ -37,6 +42,20 @@ describe('RaceCreationController', () => {
     const expectedResponse: HttpResponse = {
       data: raceCreated,
       statusCode: HttpStatusCode.OK,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should respond with error if requests is missing required params', async () => {
+    const { sut } = makeSut()
+    const params = mockRaceCreationParams()
+    delete params.title
+    const response = await sut.handle(params)
+
+    const expectedResponse: HttpErrorResponse = {
+      errors: [new MissingParamError('title')],
+      statusCode: HttpStatusCode.BAD_REQUEST,
     }
 
     expect(response).toEqual(expectedResponse)
