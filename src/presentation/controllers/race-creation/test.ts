@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker'
+import { KnownError } from 'domain/errors/known-error'
 import {
   mockRaceCreated,
   mockRaceCreation,
@@ -56,6 +58,37 @@ describe('RaceCreationController', () => {
     const expectedResponse: HttpErrorResponse = {
       errors: [new MissingParamError('title')],
       statusCode: HttpStatusCode.BAD_REQUEST,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should respond with error if requests is missing required params', async () => {
+    const { sut } = makeSut()
+    const params = mockRaceCreationParams()
+    delete params.title
+    const response = await sut.handle(params)
+
+    const expectedResponse: HttpErrorResponse = {
+      errors: [new MissingParamError('title')],
+      statusCode: HttpStatusCode.BAD_REQUEST,
+    }
+
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should respond with error if known error happens', async () => {
+    const { sut, raceCreation } = makeSut()
+
+    const error = new KnownError(faker.random.words())
+    raceCreation.create.mockRejectedValueOnce(error)
+
+    const params = mockRaceCreationParams()
+    const response = await sut.handle(params)
+
+    const expectedResponse: HttpErrorResponse = {
+      errors: [error.message],
+      statusCode: HttpStatusCode.SERVER_ERROR,
     }
 
     expect(response).toEqual(expectedResponse)
