@@ -57,7 +57,7 @@ describe('RaceCreationController', () => {
     const response = await sut.handle(params)
 
     const expectedResponse: HttpErrorResponse = {
-      errors: [new MissingParamError('title')],
+      errors: [new MissingParamError('title').message],
       statusCode: HttpStatusCode.BAD_REQUEST,
     }
 
@@ -70,9 +70,10 @@ describe('RaceCreationController', () => {
     delete params.title
     const response = await sut.handle(params)
 
+    const error = new MissingParamError('title')
     const expectedResponse: HttpErrorResponse = {
-      errors: [new MissingParamError('title')],
-      statusCode: HttpStatusCode.BAD_REQUEST,
+      errors: [error.message],
+      statusCode: error.statusCode,
     }
 
     expect(response).toEqual(expectedResponse)

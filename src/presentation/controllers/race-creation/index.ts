@@ -19,7 +19,7 @@ export class RaceCreationController implements Controller {
     params: RaceCreationParams
   ): Promise<HttpResponse<RaceCreated> | HttpErrorResponse> {
     const errors = []
-    !params.title && errors.push(new MissingParamError('title'))
+    !params.title && errors.push(new MissingParamError('title').message)
 
     if (errors.length) {
       return {
