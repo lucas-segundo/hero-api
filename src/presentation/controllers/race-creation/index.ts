@@ -1,3 +1,4 @@
+import { KnownError } from 'domain/errors/known-error'
 import {
   RaceCreated,
   RaceCreation,
@@ -26,11 +27,20 @@ export class RaceCreationController implements Controller {
       }
     }
 
-    const userCreated = await this.raceCreation.create(params)
+    try {
+      const userCreated = await this.raceCreation.create(params)
 
-    return {
-      data: userCreated,
-      statusCode: HttpStatusCode.OK,
+      return {
+        data: userCreated,
+        statusCode: HttpStatusCode.OK,
+      }
+    } catch (error) {
+      if (error instanceof KnownError) {
+        return {
+          errors: [error.message],
+          statusCode: HttpStatusCode.SERVER_ERROR,
+        }
+      }
     }
   }
 }
