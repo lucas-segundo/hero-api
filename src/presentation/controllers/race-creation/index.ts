@@ -1,4 +1,5 @@
 import { KnownError } from 'domain/errors/known-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import {
   RaceCreated,
   RaceCreation,
@@ -40,6 +41,11 @@ export class RaceCreationController implements Controller {
           errors: [error.message],
           statusCode: HttpStatusCode.SERVER_ERROR,
         }
+      }
+
+      return {
+        errors: [new UnexpectedError().message],
+        statusCode: HttpStatusCode.SERVER_ERROR,
       }
     }
   }
