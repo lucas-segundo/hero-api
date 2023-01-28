@@ -3,5 +3,5 @@ export type RaceCreationParams = {
 }
 
 export interface RaceCreation {
-  create(params: RaceCreationParams): number
+  create(params: RaceCreationParams): Promise<number>
 }
