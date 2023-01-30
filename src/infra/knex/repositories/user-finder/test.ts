@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker'
-import { DbUser } from 'app/models/db-user'
-import { mockDbUser } from 'app/models/db-user/mock'
-import { UserFinderRepositoryParams } from 'app/protocols/user-finder-repository'
+import {
+  UserFinderRepositoryModel,
+  UserFinderRepositoryParams,
+} from 'app/protocols/user-finder-repository'
+import { mockUserFinderRepositoryModel } from 'app/protocols/user-finder-repository/mock'
 import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
 import { Knex } from 'knex'
 import { KnexUserFinderRepository } from '.'
@@ -15,13 +17,13 @@ const mockUser = () => {
 }
 
 describe('KnexUserFinderRepository', () => {
-  let expectedDbUser: DbUser
+  let expectedDbUser: UserFinderRepositoryModel
 
   beforeAll(async () => {
     KnexDbHandler.connect('test')
     await KnexDbHandler.migrateLatest()
 
-    const userToInsert = mockDbUser()
+    const userToInsert = mockUserFinderRepositoryModel()
     delete userToInsert.id
 
     const ids = await KnexDbHandler.client.insert(userToInsert).into('users')

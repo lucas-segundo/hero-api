@@ -1,10 +1,17 @@
-import { DbUser } from 'app/models/db-user'
+export type UserFinderRepositoryModel = {
+  id: string
+  name: string
+  email: string
+  passwordHashed: string
+}
 
 export type UserFinderRepositoryParams = {
-  by: keyof Pick<DbUser, 'id' | 'email'>
+  by: keyof Pick<UserFinderRepositoryModel, 'id' | 'email'>
   value: string
 }
 
 export interface UserFinderRepository {
-  find(params: UserFinderRepositoryParams): Promise<DbUser | undefined>
+  find(
+    params: UserFinderRepositoryParams
+  ): Promise<UserFinderRepositoryModel | undefined>
 }

@@ -1,13 +1,15 @@
 import { faker } from '@faker-js/faker'
 import { DataNotFoundError } from 'app/errors/data-not-found-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
-import { mockDbUser } from 'app/models/db-user/mock'
 import { EncrypterParams } from 'app/protocols/encrypter'
 import { mockEncrypter } from 'app/protocols/encrypter/mock'
 import { HashComparerParams } from 'app/protocols/hash-comparer'
 import { mockHashComparer } from 'app/protocols/hash-comparer/mock'
 import { UserFinderRepositoryParams } from 'app/protocols/user-finder-repository'
-import { mockUserFinderRepository } from 'app/protocols/user-finder-repository/mock'
+import {
+  mockUserFinderRepository,
+  mockUserFinderRepositoryModel,
+} from 'app/protocols/user-finder-repository/mock'
 import { AuthenticatedUser } from 'domain/use-cases/user-authentication'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
 import { LocalUserAuthentication } from '.'
@@ -24,10 +26,10 @@ const makeSut = () => {
     encrypter
   )
 
-  const dbUser = mockDbUser()
+  const userFinderRepoModel = mockUserFinderRepositoryModel()
 
   const resolveDependencies = () => {
-    userFinderRepository.find.mockResolvedValueOnce(dbUser)
+    userFinderRepository.find.mockResolvedValueOnce(userFinderRepoModel)
     hashComparer.compare.mockResolvedValueOnce(true)
   }
 
@@ -37,12 +39,12 @@ const makeSut = () => {
     hashComparer,
     encrypter,
     resolveDependencies,
-    dbUser,
+    userFinderRepoModel,
   }
 }
 
 describe('LocalUserAuthentication', () => {
-  it('should call dbUser finder with right params', async () => {
+  it('should call userFinderRepoModel finder with right params', async () => {
     const { sut, userFinderRepository, resolveDependencies } = makeSut()
 
     resolveDependencies()
@@ -57,7 +59,7 @@ describe('LocalUserAuthentication', () => {
     expect(userFinderRepository.find).toBeCalledWith(expectedParams)
   })
 
-  it('should throw error if dbUser doesnt exist', async () => {
+  it('should throw error if userFinderRepoModel doesnt exist', async () => {
     const { sut, userFinderRepository } = makeSut()
     userFinderRepository.find.mockResolvedValueOnce(undefined)
 
@@ -68,7 +70,8 @@ describe('LocalUserAuthentication', () => {
   })
 
   it('should call hash comparer with right params', async () => {
-    const { sut, resolveDependencies, hashComparer, dbUser } = makeSut()
+    const { sut, resolveDependencies, hashComparer, userFinderRepoModel } =
+      makeSut()
 
     resolveDependencies()
 
@@ -76,16 +79,17 @@ describe('LocalUserAuthentication', () => {
     await sut.auth(params)
 
     const compareParams: HashComparerParams = {
-      hashedValue: dbUser.passwordHashed,
+      hashedValue: userFinderRepoModel.passwordHashed,
       value: params.password,
     }
     expect(hashComparer.compare).toBeCalledWith(compareParams)
   })
 
   it('should throw error if hash comparer return false', async () => {
-    const { sut, userFinderRepository, hashComparer } = makeSut()
+    const { sut, userFinderRepository, hashComparer, userFinderRepoModel } =
+      makeSut()
 
-    userFinderRepository.find.mockResolvedValueOnce(mockDbUser())
+    userFinderRepository.find.mockResolvedValueOnce(userFinderRepoModel)
     hashComparer.compare.mockResolvedValueOnce(false)
 
     const params = mockUserAuthenticationParams()
@@ -95,13 +99,14 @@ describe('LocalUserAuthentication', () => {
   })
 
   it('should call encrypter with right params', async () => {
-    const { sut, encrypter, resolveDependencies, dbUser } = makeSut()
+    const { sut, encrypter, resolveDependencies, userFinderRepoModel } =
+      makeSut()
 
     resolveDependencies()
 
     await sut.auth(mockUserAuthenticationParams())
 
-    const { id } = dbUser
+    const { id } = userFinderRepoModel
     const encrypterParams: EncrypterParams = {
       payload: {
         id,
@@ -111,14 +116,15 @@ describe('LocalUserAuthentication', () => {
     expect(encrypter.encrypt).toBeCalledWith(encrypterParams)
   })
 
-  it('should return authenticated dbUser', async () => {
-    const { sut, encrypter, resolveDependencies, dbUser } = makeSut()
+  it('should return authenticated userFinderRepoModel', async () => {
+    const { sut, encrypter, resolveDependencies, userFinderRepoModel } =
+      makeSut()
 
     const token = faker.datatype.uuid()
     encrypter.encrypt.mockResolvedValueOnce(token)
     resolveDependencies()
 
-    const { id, email, name } = dbUser
+    const { id, email, name } = userFinderRepoModel
     const aduthenticatedUser = await sut.auth({
       email,
       password: faker.internet.password(),
