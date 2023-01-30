@@ -1,4 +1,4 @@
-import { RaceCreationRepository } from 'app/protocols/race-creation-repository'
+import { RaceCreaterRepository } from 'app/protocols/race-creater-repository'
 import {
   RaceCreated,
   RaceCreation,
@@ -6,10 +6,10 @@ import {
 } from 'domain/use-cases/race-creation'
 
 export class DbRaceCreation implements RaceCreation {
-  constructor(private raceCreationRepository: RaceCreationRepository) {}
+  constructor(private RaceCreaterRepository: RaceCreaterRepository) {}
 
   async create(params: RaceCreationParams): Promise<RaceCreated> {
-    const raceCreatedRepo = await this.raceCreationRepository.create(params)
+    const raceCreatedRepo = await this.RaceCreaterRepository.create(params)
 
     return raceCreatedRepo
   }

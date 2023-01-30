@@ -1,17 +1,17 @@
 import {
-  mockRaceCreationRepository,
-  mockRaceCreationRepositoryModel,
-  mockRaceCreationRepositoryParams,
-} from 'app/protocols/race-creation-repository/mock'
+  mockRaceCreaterRepository,
+  mockRaceCreaterRepositoryModel,
+  mockRaceCreaterRepositoryParams,
+} from 'app/protocols/race-creater-repository/mock'
 import { RaceCreated } from 'domain/use-cases/race-creation'
 import { DbRaceCreation } from '.'
 
 const makeSut = () => {
-  const raceCreationRepo = mockRaceCreationRepository()
+  const raceCreationRepo = mockRaceCreaterRepository()
   const sut = new DbRaceCreation(raceCreationRepo)
 
-  const params = mockRaceCreationRepositoryParams()
-  const raceCreatedRepo = mockRaceCreationRepositoryModel()
+  const params = mockRaceCreaterRepositoryParams()
+  const raceCreatedRepo = mockRaceCreaterRepositoryModel()
 
   return {
     sut,
