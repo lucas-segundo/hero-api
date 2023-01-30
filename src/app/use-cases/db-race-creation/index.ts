@@ -9,8 +9,8 @@ export class DbRaceCreation implements RaceCreation {
   constructor(private raceCreationRepository: RaceCreationRepository) {}
 
   async create(params: RaceCreationParams): Promise<RaceCreated> {
-    await this.raceCreationRepository.create(params)
+    const raceCreatedRepo = await this.raceCreationRepository.create(params)
 
-    return
+    return raceCreatedRepo
   }
 }

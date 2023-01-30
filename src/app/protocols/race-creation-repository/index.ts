@@ -1,7 +1,12 @@
-import { RaceCreated, RaceCreationParams } from 'domain/use-cases/race-creation'
-
-export type RaceCreationRepositoryParams = RaceCreationParams
+export type RaceCreationRepositoryParams = {
+  title: string
+}
+export type RaceCreationRepositoryModel = {
+  id: string
+}
 
 export interface RaceCreationRepository {
-  create(params: RaceCreationRepositoryParams): Promise<RaceCreated>
+  create(
+    params: RaceCreationRepositoryParams
+  ): Promise<RaceCreationRepositoryModel>
 }
