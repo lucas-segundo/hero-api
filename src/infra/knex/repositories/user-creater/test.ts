@@ -1,21 +1,21 @@
-import { UserCreaterRepositoryModel } from 'app/protocols/user-creater-repository'
-import { mockUserCreaterRepositoryParams } from 'app/protocols/user-creater-repository/mock'
-import { KnexUserCreaterRepository } from '.'
+import { UserCreationRepositoryModel } from 'app/protocols/user-creater-repository'
+import { mockUserCreationRepositoryParams } from 'app/protocols/user-creater-repository/mock'
+import { KnexUserCreationRepository } from '.'
 import { KnexDbHandler } from '../../config/knex-db-handler'
 
 const makeSut = (dbClient = KnexDbHandler.client) => {
-  const sut = new KnexUserCreaterRepository(dbClient)
+  const sut = new KnexUserCreationRepository(dbClient)
   const insertSpy = jest.spyOn(dbClient, 'insert')
-  const userCreaterParams = mockUserCreaterRepositoryParams()
+  const UserCreationParams = mockUserCreationRepositoryParams()
 
   return {
     sut,
     insertSpy,
-    userCreaterParams,
+    UserCreationParams,
   }
 }
 
-describe('KnexUserCreaterRepository', () => {
+describe('KnexUserCreationRepository', () => {
   beforeAll(async () => {
     KnexDbHandler.connect('test')
     await KnexDbHandler.migrateLatest()
@@ -26,21 +26,21 @@ describe('KnexUserCreaterRepository', () => {
   })
 
   it('should call client with right params', async () => {
-    const { sut, insertSpy, userCreaterParams } = makeSut()
+    const { sut, insertSpy, UserCreationParams } = makeSut()
 
-    await sut.create(userCreaterParams)
+    await sut.create(UserCreationParams)
 
-    expect(insertSpy).toBeCalledWith(userCreaterParams)
+    expect(insertSpy).toBeCalledWith(UserCreationParams)
   })
 
   it('should return the user created', async () => {
-    const { sut, userCreaterParams } = makeSut()
+    const { sut, UserCreationParams } = makeSut()
 
-    const user = await sut.create(userCreaterParams)
+    const user = await sut.create(UserCreationParams)
     const tableRows = await KnexDbHandler.client('users').count()
     const id = tableRows[0]['count(*)'].toString()
 
-    const expectedUser: UserCreaterRepositoryModel = { id }
+    const expectedUser: UserCreationRepositoryModel = { id }
     expect(user).toEqual(expectedUser)
   })
 })

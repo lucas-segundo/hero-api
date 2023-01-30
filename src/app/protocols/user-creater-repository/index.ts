@@ -1,14 +1,14 @@
-export type UserCreaterRepositoryParams = {
+export type UserCreationRepositoryParams = {
   name: string
   email: string
   passwordHashed: string
 }
 
-export type UserCreaterRepositoryModel = {
+export type UserCreationRepositoryModel = {
   id: string
 }
-export interface UserCreaterRepository {
+export interface UserCreationRepository {
   create(
-    params: UserCreaterRepositoryParams
-  ): Promise<UserCreaterRepositoryModel>
+    params: UserCreationRepositoryParams
+  ): Promise<UserCreationRepositoryModel>
 }

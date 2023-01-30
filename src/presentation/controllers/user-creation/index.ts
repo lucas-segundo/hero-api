@@ -1,6 +1,9 @@
 import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
-import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
+import {
+  UserCreation,
+  UserCreationParams,
+} from 'domain/use-cases/user-creation'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
 import { Controller } from 'presentation/protocols/controller'
 import {
@@ -10,10 +13,10 @@ import {
 } from 'presentation/protocols/http'
 
 export class UserCreationController implements Controller {
-  constructor(private readonly userCreater: UserCreater) {}
+  constructor(private readonly UserCreation: UserCreation) {}
 
   async handle(
-    params: UserCreaterParams
+    params: UserCreationParams
   ): Promise<HttpResponse | HttpErrorResponse> {
     const errors = []
 
@@ -30,7 +33,7 @@ export class UserCreationController implements Controller {
     }
 
     try {
-      const user = await this.userCreater.create(params)
+      const user = await this.UserCreation.create(params)
 
       return {
         data: user,

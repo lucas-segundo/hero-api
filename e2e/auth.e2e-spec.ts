@@ -2,18 +2,18 @@ import * as request from 'supertest'
 import { HttpStatusCode } from 'presentation/protocols/http'
 import { checkIfObjectKeyExist } from './helpers'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
-import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
-import { UserCreaterParams } from 'domain/use-cases/user-creater'
+import { mockUserCreationParams } from 'domain/use-cases/user-creation/mock'
+import { UserCreationParams } from 'domain/use-cases/user-creation'
 
 describe('Users Route (e2e)', () => {
   const url = 'http://localhost:3000'
   const path = '/auth'
-  let userCreaterParams: UserCreaterParams
+  let UserCreationParams: UserCreationParams
 
   beforeAll(() => {
-    userCreaterParams = mockUserCreaterParams()
+    UserCreationParams = mockUserCreationParams()
 
-    return request(url).post('/users').send(userCreaterParams)
+    return request(url).post('/users').send(UserCreationParams)
   })
 
   describe('POST /auth', () => {

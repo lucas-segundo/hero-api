@@ -1,23 +1,23 @@
 import { faker } from '@faker-js/faker'
 import {
-  UserCreaterRepository,
-  UserCreaterRepositoryModel,
-  UserCreaterRepositoryParams,
+  UserCreationRepository,
+  UserCreationRepositoryModel,
+  UserCreationRepositoryParams,
 } from '.'
 
-export const mockUserCreaterRepositoryParams =
-  (): UserCreaterRepositoryParams => ({
+export const mockUserCreationRepositoryParams =
+  (): UserCreationRepositoryParams => ({
     email: faker.internet.email(),
     name: faker.name.fullName(),
     passwordHashed: faker.datatype.uuid(),
   })
 
-export const mockUserCreaterRepositoryModel =
-  (): UserCreaterRepositoryModel => ({
+export const mockUserCreationRepositoryModel =
+  (): UserCreationRepositoryModel => ({
     id: faker.datatype.uuid(),
   })
 
-export const mockUserCreaterRepository =
-  (): jest.Mocked<UserCreaterRepository> => ({
+export const mockUserCreationRepository =
+  (): jest.Mocked<UserCreationRepository> => ({
     create: jest.fn(),
   })

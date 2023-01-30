@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker'
 import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { User } from 'domain/models/user'
-import { UserCreaterParams } from 'domain/use-cases/user-creater'
-import { mockUserCreater } from 'domain/use-cases/user-creater/mock'
+import { UserCreationParams } from 'domain/use-cases/user-creation'
+import { mockUserCreation } from 'domain/use-cases/user-creation/mock'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
 import {
   HttpErrorResponse,
@@ -13,17 +13,17 @@ import {
 import { UserCreationController } from '.'
 
 const makeSut = () => {
-  const userCreater = mockUserCreater()
-  const sut = new UserCreationController(userCreater)
+  const UserCreation = mockUserCreation()
+  const sut = new UserCreationController(UserCreation)
 
-  const params: UserCreaterParams = {
+  const params: UserCreationParams = {
     email: faker.internet.email(),
     name: faker.name.fullName(),
     password: faker.internet.password(),
   }
 
   return {
-    userCreater,
+    UserCreation,
     sut,
     params,
   }
@@ -31,22 +31,22 @@ const makeSut = () => {
 
 describe('UserCreationController', () => {
   it('should create a user with right params', async () => {
-    const { sut, userCreater, params } = makeSut()
+    const { sut, UserCreation, params } = makeSut()
 
     await sut.handle(params)
 
-    expect(userCreater.create).toBeCalledWith(params)
+    expect(UserCreation.create).toBeCalledWith(params)
   })
 
   it('should return user data after creation', async () => {
-    const { sut, params, userCreater } = makeSut()
+    const { sut, params, UserCreation } = makeSut()
 
     const user: User = {
       id: faker.datatype.uuid(),
       name: params.name,
       email: params.email,
     }
-    userCreater.create.mockResolvedValueOnce(user)
+    UserCreation.create.mockResolvedValueOnce(user)
 
     const response = await sut.handle(params)
 
@@ -72,10 +72,10 @@ describe('UserCreationController', () => {
   })
 
   it('should handle known error', async () => {
-    const { sut, params, userCreater } = makeSut()
+    const { sut, params, UserCreation } = makeSut()
 
     const error = new KnownError(faker.random.words())
-    userCreater.create.mockRejectedValueOnce(error)
+    UserCreation.create.mockRejectedValueOnce(error)
 
     const response = await sut.handle(params)
     const expectedResponse: HttpErrorResponse = {
@@ -87,9 +87,9 @@ describe('UserCreationController', () => {
   })
 
   it('should handle error when something wrong happens', async () => {
-    const { sut, params, userCreater } = makeSut()
+    const { sut, params, UserCreation } = makeSut()
 
-    userCreater.create.mockRejectedValueOnce(new Error())
+    UserCreation.create.mockRejectedValueOnce(new Error())
 
     const response = await sut.handle(params)
     const expectedResponse: HttpErrorResponse = {

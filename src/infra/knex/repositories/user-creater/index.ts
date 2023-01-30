@@ -1,16 +1,16 @@
 import {
-  UserCreaterRepository,
-  UserCreaterRepositoryModel,
-  UserCreaterRepositoryParams,
+  UserCreationRepository,
+  UserCreationRepositoryModel,
+  UserCreationRepositoryParams,
 } from 'app/protocols/user-creater-repository'
 import { Knex } from 'knex'
 
-export class KnexUserCreaterRepository implements UserCreaterRepository {
+export class KnexUserCreationRepository implements UserCreationRepository {
   constructor(private readonly client: Knex) {}
 
   async create(
-    params: UserCreaterRepositoryParams
-  ): Promise<UserCreaterRepositoryModel> {
+    params: UserCreationRepositoryParams
+  ): Promise<UserCreationRepositoryModel> {
     const result = await this.client.insert(params).into('users')
 
     return {

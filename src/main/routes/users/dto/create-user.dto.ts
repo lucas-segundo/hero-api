@@ -1,3 +1,3 @@
-import { UserCreaterParams } from 'domain/use-cases/user-creater'
+import { UserCreationParams } from 'domain/use-cases/user-creation'
 
-export type CreateUserDto = UserCreaterParams
+export type CreateUserDto = UserCreationParams

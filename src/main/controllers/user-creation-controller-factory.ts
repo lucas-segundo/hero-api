@@ -1,8 +1,8 @@
-import { makeUserCreater } from 'main/use-cases/user-creater-factory'
+import { makeUserCreation } from 'main/use-cases/user-creater-factory'
 import { UserCreationController } from 'presentation/controllers/user-creation'
 
 export const makeUserCreationController = () => {
-  const userCreater = makeUserCreater()
+  const UserCreation = makeUserCreation()
 
-  return new UserCreationController(userCreater)
+  return new UserCreationController(UserCreation)
 }

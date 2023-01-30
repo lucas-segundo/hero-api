@@ -1,21 +1,24 @@
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { Hasher } from 'app/protocols/hasher'
-import { UserCreaterRepository } from 'app/protocols/user-creater-repository'
+import { UserCreationRepository } from 'app/protocols/user-creater-repository'
 import { User } from 'domain/models/user'
-import { UserCreater, UserCreaterParams } from 'domain/use-cases/user-creater'
+import {
+  UserCreation,
+  UserCreationParams,
+} from 'domain/use-cases/user-creation'
 
-export class DbUserCreater implements UserCreater {
+export class DbUserCreation implements UserCreation {
   constructor(
-    private readonly userCreaterRepository: UserCreaterRepository,
+    private readonly UserCreationRepository: UserCreationRepository,
     private readonly hasher: Hasher
   ) {}
 
-  async create({ email, name, password }: UserCreaterParams): Promise<User> {
+  async create({ email, name, password }: UserCreationParams): Promise<User> {
     try {
       const passwordHashed = await this.hasher.hash({
         value: password,
       })
-      const { id } = await this.userCreaterRepository.create({
+      const { id } = await this.UserCreationRepository.create({
         email,
         name,
         passwordHashed,

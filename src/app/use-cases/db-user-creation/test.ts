@@ -2,35 +2,35 @@ import { faker } from '@faker-js/faker'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { HasherParams } from 'app/protocols/hasher'
 import { mockHasher } from 'app/protocols/hasher/mock'
-import { UserCreaterRepositoryParams } from 'app/protocols/user-creater-repository'
+import { UserCreationRepositoryParams } from 'app/protocols/user-creater-repository'
 import {
-  mockUserCreaterRepository,
-  mockUserCreaterRepositoryModel,
+  mockUserCreationRepository,
+  mockUserCreationRepositoryModel,
 } from 'app/protocols/user-creater-repository/mock'
 import { User } from 'domain/models/user'
-import { UserCreaterParams } from 'domain/use-cases/user-creater'
-import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
-import { DbUserCreater } from '.'
+import { UserCreationParams } from 'domain/use-cases/user-creation'
+import { mockUserCreationParams } from 'domain/use-cases/user-creation/mock'
+import { DbUserCreation } from '.'
 
 const makeSut = () => {
-  const userCreaterRepository = mockUserCreaterRepository()
+  const UserCreationRepository = mockUserCreationRepository()
   const hasher = mockHasher()
-  const sut = new DbUserCreater(userCreaterRepository, hasher)
-  const params: UserCreaterParams = mockUserCreaterParams()
+  const sut = new DbUserCreation(UserCreationRepository, hasher)
+  const params: UserCreationParams = mockUserCreationParams()
 
   return {
     sut,
     params,
-    userCreaterRepository,
+    UserCreationRepository,
     hasher,
   }
 }
 
-describe('DbUserCreater', () => {
+describe('DbUserCreation', () => {
   it('should call hasher with right params', async () => {
-    const { sut, params, hasher, userCreaterRepository } = makeSut()
-    userCreaterRepository.create.mockResolvedValueOnce(
-      mockUserCreaterRepositoryModel()
+    const { sut, params, hasher, UserCreationRepository } = makeSut()
+    UserCreationRepository.create.mockResolvedValueOnce(
+      mockUserCreationRepositoryModel()
     )
 
     await sut.create(params)
@@ -42,9 +42,9 @@ describe('DbUserCreater', () => {
   })
 
   it('should call user creater repository with right params', async () => {
-    const { sut, params, userCreaterRepository, hasher } = makeSut()
-    userCreaterRepository.create.mockResolvedValueOnce(
-      mockUserCreaterRepositoryModel()
+    const { sut, params, UserCreationRepository, hasher } = makeSut()
+    UserCreationRepository.create.mockResolvedValueOnce(
+      mockUserCreationRepositoryModel()
     )
 
     const passwordHashed = faker.datatype.uuid()
@@ -52,16 +52,16 @@ describe('DbUserCreater', () => {
 
     await sut.create(params)
 
-    const userRepoParams: UserCreaterRepositoryParams = {
+    const userRepoParams: UserCreationRepositoryParams = {
       email: params.email,
       name: params.name,
       passwordHashed: passwordHashed,
     }
-    expect(userCreaterRepository.create).toBeCalledWith(userRepoParams)
+    expect(UserCreationRepository.create).toBeCalledWith(userRepoParams)
   })
 
   it('should return the user data after creation', async () => {
-    const { sut, params, userCreaterRepository, hasher } = makeSut()
+    const { sut, params, UserCreationRepository, hasher } = makeSut()
 
     const passwordHashed = faker.datatype.uuid()
     hasher.hash.mockResolvedValueOnce(passwordHashed)
@@ -71,7 +71,7 @@ describe('DbUserCreater', () => {
       email: params.email,
       name: params.name,
     }
-    userCreaterRepository.create.mockResolvedValueOnce(userCreated)
+    UserCreationRepository.create.mockResolvedValueOnce(userCreated)
 
     const modelData = await sut.create(params)
 
@@ -79,8 +79,8 @@ describe('DbUserCreater', () => {
   })
 
   it('should handle error if user creater repository throws', async () => {
-    const { sut, params, userCreaterRepository } = makeSut()
-    userCreaterRepository.create.mockRejectedValueOnce(new Error())
+    const { sut, params, UserCreationRepository } = makeSut()
+    UserCreationRepository.create.mockRejectedValueOnce(new Error())
 
     const modelData = sut.create(params)
 

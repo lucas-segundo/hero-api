@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
+import { mockUserCreationParams } from 'domain/use-cases/user-creation/mock'
 import { UsersController } from './users.controller'
 import { UsersService } from './users.service'
 import {
@@ -33,7 +33,7 @@ describe('UsersController', () => {
     const createSpy = jest.spyOn(userService, 'create')
 
     const res = mockExpressResponse()
-    const params = mockUserCreaterParams()
+    const params = mockUserCreationParams()
     await controller.create(params, res)
 
     expect(createSpy).toBeCalledWith(params)
@@ -48,7 +48,7 @@ describe('UsersController', () => {
     createSpy.mockResolvedValueOnce(result)
 
     const res = mockExpressResponse()
-    const params = mockUserCreaterParams()
+    const params = mockUserCreationParams()
     await controller.create(params, res)
 
     expect(res.status).toBeCalledWith(result.statusCode)
@@ -66,7 +66,7 @@ describe('UsersController', () => {
     createSpy.mockResolvedValueOnce(result)
 
     const res = mockExpressResponse()
-    const params = mockUserCreaterParams()
+    const params = mockUserCreationParams()
     await controller.create(params, res)
 
     expect(res.status).toBeCalledWith(result.statusCode)
