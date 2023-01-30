@@ -15,13 +15,17 @@ export class DbUserCreater implements UserCreater {
       const passwordHashed = await this.hasher.hash({
         value: password,
       })
-      const userCreated = await this.userCreaterRepository.create({
+      const { id } = await this.userCreaterRepository.create({
         email,
         name,
         passwordHashed,
       })
 
-      return userCreated
+      return {
+        id,
+        name,
+        email,
+      }
     } catch (error) {
       throw new UnexpectedError()
     }

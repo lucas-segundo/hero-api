@@ -3,7 +3,10 @@ import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { HasherParams } from 'app/protocols/hasher'
 import { mockHasher } from 'app/protocols/hasher/mock'
 import { UserCreaterRepositoryParams } from 'app/protocols/user-creater-repository'
-import { mockUserCreaterRepository } from 'app/protocols/user-creater-repository/mock'
+import {
+  mockUserCreaterRepository,
+  mockUserCreaterRepositoryModel,
+} from 'app/protocols/user-creater-repository/mock'
 import { User } from 'domain/models/user'
 import { UserCreaterParams } from 'domain/use-cases/user-creater'
 import { mockUserCreaterParams } from 'domain/use-cases/user-creater/mock'
@@ -25,7 +28,10 @@ const makeSut = () => {
 
 describe('DbUserCreater', () => {
   it('should call hasher with right params', async () => {
-    const { sut, params, hasher } = makeSut()
+    const { sut, params, hasher, userCreaterRepository } = makeSut()
+    userCreaterRepository.create.mockResolvedValueOnce(
+      mockUserCreaterRepositoryModel()
+    )
 
     await sut.create(params)
 
@@ -37,6 +43,10 @@ describe('DbUserCreater', () => {
 
   it('should call user creater repository with right params', async () => {
     const { sut, params, userCreaterRepository, hasher } = makeSut()
+    userCreaterRepository.create.mockResolvedValueOnce(
+      mockUserCreaterRepositoryModel()
+    )
+
     const passwordHashed = faker.datatype.uuid()
     hasher.hash.mockResolvedValueOnce(passwordHashed)
 

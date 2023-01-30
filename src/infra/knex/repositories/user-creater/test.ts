@@ -1,5 +1,5 @@
+import { UserCreaterRepositoryModel } from 'app/protocols/user-creater-repository'
 import { mockUserCreaterRepositoryParams } from 'app/protocols/user-creater-repository/mock'
-import { User } from 'domain/models/user'
 import { KnexUserCreaterRepository } from '.'
 import { KnexDbHandler } from '../../config/knex-db-handler'
 
@@ -40,7 +40,7 @@ describe('KnexUserCreaterRepository', () => {
     const tableRows = await KnexDbHandler.client('users').count()
     const id = tableRows[0]['count(*)'].toString()
 
-    const expectedUser: User = { id, ...userCreaterParams }
+    const expectedUser: UserCreaterRepositoryModel = { id }
     expect(user).toEqual(expectedUser)
   })
 })
