@@ -3,6 +3,7 @@ import {
   mockRaceCreaterRepositoryModel,
   mockRaceCreaterRepositoryParams,
 } from 'app/protocols/race-creater-repository/mock'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { RaceCreated } from 'domain/use-cases/race-creation'
 import { DbRaceCreation } from '.'
 
@@ -40,5 +41,15 @@ describe('DbRaceCreation', () => {
       id: raceCreatedRepo.id,
     }
     expect(data).toEqual(expectedData)
+  })
+
+  it('should throw unexpected error if something wrong happened', async () => {
+    const { sut, raceCreationRepo, params } = makeSut()
+
+    raceCreationRepo.create.mockRejectedValueOnce(new Error())
+
+    const result = sut.create(params)
+
+    expect(result).rejects.toThrowError(new UnexpectedError())
   })
 })
