@@ -4,11 +4,12 @@ import { checkIfObjectKeyExist } from './helpers'
 import { getAuthToken } from './helpers/get-auth-token'
 import { mockRaceCreationParams } from 'domain/use-cases/race-creation/mock'
 import { RaceCreationParams } from 'domain/use-cases/race-creation'
+import { TestEnvVar } from './helpers/test-env-var'
 
 describe('Races Route (e2e)', () => {
   let bearerToken: string
   let params: RaceCreationParams
-  const url = 'http://localhost:3000'
+  const url = TestEnvVar.URL
   const path = '/races'
 
   beforeAll(async () => {

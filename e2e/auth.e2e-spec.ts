@@ -4,9 +4,10 @@ import { checkIfObjectKeyExist } from './helpers'
 import { mockUserAuthenticationParams } from 'domain/use-cases/user-authentication/mock'
 import { mockUserCreationParams } from 'domain/use-cases/user-creation/mock'
 import { UserCreationParams } from 'domain/use-cases/user-creation'
+import { TestEnvVar } from './helpers/test-env-var'
 
 describe('Users Route (e2e)', () => {
-  const url = 'http://localhost:3000'
+  const url = TestEnvVar.URL
   const path = '/auth'
   let UserCreationParams: UserCreationParams
 
