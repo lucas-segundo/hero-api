@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { mockRace } from 'domain/models/race/mock'
 import { mockRaceCreationParams } from 'domain/use-cases/race-creation/mock'
+import { mockExpressResponse } from 'main/helpers/mock-express-response'
+import { HttpResponse, HttpStatusCode } from 'presentation/protocols/http'
 import { makeRacesModule } from './factory.module'
 import { RacesController } from './races.controller'
 import { RacesService } from './races.service'
@@ -20,8 +23,25 @@ describe('RacesController', () => {
   it('should call service.create with right params', async () => {
     const params = mockRaceCreationParams()
     const createSpy = jest.spyOn(service, 'create')
-    await controller.create(params)
+    const res = mockExpressResponse()
+    await controller.create(params, res)
 
     expect(createSpy).toBeCalledWith(params)
+  })
+
+  it('should service.create respond with right data', async () => {
+    const createSpy = jest.spyOn(service, 'create')
+    const result: HttpResponse = {
+      data: mockRace(),
+      statusCode: HttpStatusCode.CREATED,
+    }
+    createSpy.mockResolvedValueOnce(result)
+
+    const res = mockExpressResponse()
+    const params = mockRaceCreationParams()
+    await controller.create(params, res)
+
+    expect(res.status).toBeCalledWith(result.statusCode)
+    expect(res.send).toBeCalledWith({ data: result.data })
   })
 })
