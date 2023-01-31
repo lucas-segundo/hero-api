@@ -44,7 +44,7 @@ describe('RaceCreationController', () => {
 
     const expectedResponse: HttpResponse = {
       data: raceCreated,
-      statusCode: HttpStatusCode.OK,
+      statusCode: HttpStatusCode.CREATED,
     }
 
     expect(response).toEqual(expectedResponse)
