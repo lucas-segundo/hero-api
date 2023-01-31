@@ -17,8 +17,6 @@ export class KnexRaceCreaterRepository implements RaceCreaterRepository {
       .insert(params, ['*'])
       .into(this.tableName)
 
-    return {
-      id: result[0].id.toString(),
-    }
+    return result[0]
   }
 }

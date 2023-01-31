@@ -11,4 +11,5 @@ export const mockRaceCreationParams = (): RaceCreationParams => ({
 
 export const mockRaceCreated = (): RaceCreated => ({
   id: faker.datatype.uuid(),
+  title: faker.random.words(),
 })

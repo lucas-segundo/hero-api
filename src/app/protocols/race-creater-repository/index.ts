@@ -2,7 +2,8 @@ export type RaceCreaterRepositoryParams = {
   title: string
 }
 export type RaceCreaterRepositoryModel = {
-  id: string
+  id: string | number
+  title: string
 }
 
 export interface RaceCreaterRepository {

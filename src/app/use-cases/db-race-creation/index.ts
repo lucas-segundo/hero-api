@@ -11,9 +11,12 @@ export class DbRaceCreation implements RaceCreation {
 
   async create(params: RaceCreationParams): Promise<RaceCreated> {
     try {
-      const raceCreatedRepo = await this.RaceCreaterRepository.create(params)
+      const { id, title } = await this.RaceCreaterRepository.create(params)
 
-      return raceCreatedRepo
+      return {
+        id: id.toString(),
+        title,
+      }
     } catch (error) {
       throw new UnexpectedError()
     }

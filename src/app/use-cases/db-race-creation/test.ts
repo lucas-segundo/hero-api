@@ -24,7 +24,9 @@ const makeSut = () => {
 
 describe('DbRaceCreation', () => {
   it('should call race creation repo with right params', async () => {
-    const { sut, params, raceCreationRepo } = makeSut()
+    const { sut, params, raceCreationRepo, raceCreatedRepo } = makeSut()
+    raceCreationRepo.create.mockResolvedValueOnce(raceCreatedRepo)
+
     await sut.create(params)
 
     expect(raceCreationRepo.create).toBeCalledWith(params)
@@ -38,7 +40,8 @@ describe('DbRaceCreation', () => {
     const data = await sut.create(params)
 
     const expectedData: RaceCreated = {
-      id: raceCreatedRepo.id,
+      id: raceCreatedRepo.id.toString(),
+      title: raceCreatedRepo.title,
     }
     expect(data).toEqual(expectedData)
   })

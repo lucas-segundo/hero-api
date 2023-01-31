@@ -1,4 +1,3 @@
-import { RaceCreaterRepositoryModel } from 'app/protocols/race-creater-repository'
 import { mockRaceCreaterRepositoryParams } from 'app/protocols/race-creater-repository/mock'
 import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
 import { RacesSchema } from 'infra/knex/schemas/races'
@@ -48,10 +47,6 @@ describe('KnexRaceCreaterRepository', () => {
     const model = await sut.create(params)
     const firstRow = await client.select<RacesSchema>('*').from('races').first()
 
-    const expectedModel: RaceCreaterRepositoryModel = {
-      id: firstRow.id.toString(),
-    }
-
-    expect(model).toEqual(expectedModel)
+    expect(model).toEqual(firstRow)
   })
 })

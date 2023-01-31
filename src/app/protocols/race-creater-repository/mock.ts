@@ -13,6 +13,7 @@ export const mockRaceCreaterRepositoryParams =
 export const mockRaceCreaterRepositoryModel =
   (): RaceCreaterRepositoryModel => ({
     id: faker.datatype.uuid(),
+    title: faker.random.words(),
   })
 
 export const mockRaceCreaterRepository =
