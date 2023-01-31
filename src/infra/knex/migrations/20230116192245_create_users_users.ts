@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   const hasTable = await knex.schema.hasTable('users')
 
   if (!hasTable) {
-    return knex.schema.createTableIfNotExists('users', (table) => {
+    return knex.schema.createTable('users', (table) => {
       table.increments('id').primary()
       table.string('name')
       table.string('email')
