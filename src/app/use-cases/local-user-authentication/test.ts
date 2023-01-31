@@ -131,7 +131,7 @@ describe('LocalUserAuthentication', () => {
     })
 
     const user: User = {
-      id,
+      id: id.toString(),
       email,
       name,
     }

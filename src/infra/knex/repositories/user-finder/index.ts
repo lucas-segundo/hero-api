@@ -3,6 +3,7 @@ import {
   UserFinderRepositoryModel,
   UserFinderRepositoryParams,
 } from 'app/protocols/user-finder-repository'
+import { UsersSchema } from 'infra/knex/schemas/users'
 import { Knex } from 'knex'
 
 export class KnexUserFinderRepository implements UserFinderRepository {
@@ -13,7 +14,7 @@ export class KnexUserFinderRepository implements UserFinderRepository {
   }: UserFinderRepositoryParams): Promise<UserFinderRepositoryModel> {
     const data = await this.client
       .select('*')
-      .from<UserFinderRepositoryModel>('users')
+      .from<UsersSchema>('users')
       .where(by, value)
       .first()
 

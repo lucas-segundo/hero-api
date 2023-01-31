@@ -28,9 +28,10 @@ export class LocalUserAuthentication implements UserAuthentication {
 
       await this.checkIfPasswordIsRight(passwordHashed, password)
 
-      const token = await this.createToken(id)
+      const stringId = id.toString()
+      const token = await this.createToken(stringId)
       const user: User = {
-        id,
+        id: stringId,
         email,
         name,
       }

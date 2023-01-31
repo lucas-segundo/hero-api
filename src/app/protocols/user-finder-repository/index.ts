@@ -1,5 +1,5 @@
 export type UserFinderRepositoryModel = {
-  id: string
+  id: string | number
   name: string
   email: string
   passwordHashed: string
