@@ -3,6 +3,7 @@ import {
   RaceCreaterRepositoryModel,
   RaceCreaterRepositoryParams,
 } from 'app/protocols/race-creater-repository'
+import { RacesSchema } from 'infra/knex/schemas/races'
 import { Knex } from 'knex'
 
 export class KnexRaceCreaterRepository implements RaceCreaterRepository {
@@ -12,7 +13,12 @@ export class KnexRaceCreaterRepository implements RaceCreaterRepository {
   async create(
     params: RaceCreaterRepositoryParams
   ): Promise<RaceCreaterRepositoryModel> {
-    await this.client.insert(params).into(this.tableName)
-    return
+    const result: RacesSchema[] = await this.client
+      .insert(params, ['*'])
+      .into(this.tableName)
+
+    return {
+      id: result[0].id.toString(),
+    }
   }
 }
