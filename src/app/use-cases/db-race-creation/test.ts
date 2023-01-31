@@ -4,7 +4,7 @@ import {
   mockRaceCreaterRepositoryParams,
 } from 'app/protocols/race-creater-repository/mock'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
-import { RaceCreated } from 'domain/use-cases/race-creation'
+import { Race } from 'domain/models/race'
 import { DbRaceCreation } from '.'
 
 const makeSut = () => {
@@ -39,7 +39,7 @@ describe('DbRaceCreation', () => {
 
     const data = await sut.create(params)
 
-    const expectedData: RaceCreated = {
+    const expectedData: Race = {
       id: raceCreatedRepo.id.toString(),
       title: raceCreatedRepo.title,
     }

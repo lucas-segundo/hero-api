@@ -1,7 +1,7 @@
 import { RaceCreaterRepository } from 'app/protocols/race-creater-repository'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
+import { Race } from 'domain/models/race'
 import {
-  RaceCreated,
   RaceCreation,
   RaceCreationParams,
 } from 'domain/use-cases/race-creation'
@@ -9,7 +9,7 @@ import {
 export class DbRaceCreation implements RaceCreation {
   constructor(private RaceCreaterRepository: RaceCreaterRepository) {}
 
-  async create(params: RaceCreationParams): Promise<RaceCreated> {
+  async create(params: RaceCreationParams): Promise<Race> {
     try {
       const { id, title } = await this.RaceCreaterRepository.create(params)
 

@@ -1,7 +1,7 @@
 import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
+import { Race } from 'domain/models/race'
 import {
-  RaceCreated,
   RaceCreation,
   RaceCreationParams,
 } from 'domain/use-cases/race-creation'
@@ -17,7 +17,7 @@ export class RaceCreationController implements Controller {
   constructor(private raceCreation: RaceCreation) {}
   async handle(
     params: RaceCreationParams
-  ): Promise<HttpResponse<RaceCreated> | HttpErrorResponse> {
+  ): Promise<HttpResponse<Race> | HttpErrorResponse> {
     const errors = []
     !params.title && errors.push(new MissingParamError('title').message)
 

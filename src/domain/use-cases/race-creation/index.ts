@@ -1,11 +1,8 @@
+import { Race } from 'domain/models/race'
+
 export type RaceCreationParams = {
   title: string
 }
-
-export type RaceCreated = {
-  id: string
-  title: string
-}
 export interface RaceCreation {
-  create(params: RaceCreationParams): Promise<RaceCreated>
+  create(params: RaceCreationParams): Promise<Race>
 }
