@@ -33,7 +33,7 @@ export class RaceCreationController implements Controller {
 
       return {
         data: userCreated,
-        statusCode: HttpStatusCode.OK,
+        statusCode: HttpStatusCode.CREATED,
       }
     } catch (error) {
       if (error instanceof KnownError) {
