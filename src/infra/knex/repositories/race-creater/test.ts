@@ -31,8 +31,7 @@ describe('KnexRaceCreaterRepository', () => {
       into: jest.fn().mockReturnThis(),
     } as unknown as Knex
     jest.spyOn(client, 'into').mockResolvedValueOnce([{ id: 1 }])
-    const sut = new KnexRaceCreaterRepository(client)
-
+    const { sut } = makeSut(client)
     const params = mockRaceCreaterRepositoryParams()
     await sut.create(params)
 
@@ -48,5 +47,18 @@ describe('KnexRaceCreaterRepository', () => {
     const firstRow = await client.select<RacesSchema>('*').from('races').first()
 
     expect(model).toEqual(firstRow)
+  })
+
+  it('should throw error with something wrong has happened', () => {
+    const client = {
+      insert: jest.fn().mockReturnThis(),
+      into: jest.fn().mockReturnThis(),
+    } as unknown as Knex
+    jest.spyOn(client, 'into').mockRejectedValueOnce(new Error())
+    const { sut, params } = makeSut(client)
+
+    const promise = sut.create(params)
+
+    expect(promise).rejects.toThrowError()
   })
 })
