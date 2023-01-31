@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { KnownError } from 'domain/errors/known-error'
 import { UnexpectedError } from 'domain/errors/unexpected-error'
+import { mockRace } from 'domain/models/race/mock'
 import {
-  mockRaceCreated,
   mockRaceCreation,
   mockRaceCreationParams,
 } from 'domain/use-cases/race-creation/mock'
@@ -36,7 +36,7 @@ describe('RaceCreationController', () => {
 
   it('should respond with race created', async () => {
     const { sut, raceCreation } = makeSut()
-    const raceCreated = mockRaceCreated()
+    const raceCreated = mockRace()
     raceCreation.create.mockResolvedValueOnce(raceCreated)
 
     const params = mockRaceCreationParams()
