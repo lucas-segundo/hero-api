@@ -1,4 +1,4 @@
-# Welcome to Funny Bank API
+# Welcome to Hero API
 
 This project uses [NestJS](https://nestjs.com/) as the framework, [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) as the architecture pattern and [Test-Driven Development (TDD)](https://en.wikipedia.org/wiki/Test-driven_development) as the methodology. This project is current in development.
 
