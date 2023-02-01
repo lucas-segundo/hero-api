@@ -1,4 +1,5 @@
 import { KnownError } from 'domain/errors/known-error'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { Race } from 'domain/models/race'
 import { RaceFinder, RaceFinderParams } from 'domain/use-cases/race-finder'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
@@ -38,6 +39,11 @@ export class RaceFinderController implements Controller {
           errors: [error.message],
           statusCode: HttpStatusCode.SERVER_ERROR,
         }
+      }
+
+      return {
+        errors: [new UnexpectedError().message],
+        statusCode: HttpStatusCode.SERVER_ERROR,
       }
     }
   }
