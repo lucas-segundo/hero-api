@@ -5,7 +5,12 @@ import {
   mockRaceFinder,
   mockRaceFinderParams,
 } from 'domain/use-cases/race-finder/mock'
-import { HttpResponse, HttpStatusCode } from 'presentation/protocols/http'
+import { MissingParamError } from 'presentation/errors/missing-param-error'
+import {
+  HttpErrorResponse,
+  HttpResponse,
+  HttpStatusCode,
+} from 'presentation/protocols/http'
 import { RaceFinderController } from '.'
 
 describe('RaceFinderController', () => {
@@ -35,5 +40,21 @@ describe('RaceFinderController', () => {
     }
 
     expect(data).toEqual(expectedResponse)
+  })
+
+  it('should respond with error if required params are missing', async () => {
+    const raceFinder = mockRaceFinder()
+    const sut = new RaceFinderController(raceFinder)
+
+    const params: RaceFinderParams = mockRaceFinderParams()
+    delete params.id
+    const result = await sut.handle(params)
+
+    const httpErrorResponse: HttpErrorResponse = {
+      errors: [new MissingParamError('id').message],
+      statusCode: HttpStatusCode.BAD_REQUEST,
+    }
+
+    expect(result).toEqual(httpErrorResponse)
   })
 })
