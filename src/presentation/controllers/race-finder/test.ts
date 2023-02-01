@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker'
+import { KnownError } from 'domain/errors/known-error'
 import { Race } from 'domain/models/race'
 import { mockRace } from 'domain/models/race/mock'
 import { RaceFinderParams } from 'domain/use-cases/race-finder'
@@ -53,6 +55,22 @@ describe('RaceFinderController', () => {
     const httpErrorResponse: HttpErrorResponse = {
       errors: [new MissingParamError('id').message],
       statusCode: HttpStatusCode.BAD_REQUEST,
+    }
+
+    expect(result).toEqual(httpErrorResponse)
+  })
+
+  it('should respond with known error if an expected error has happened', async () => {
+    const raceFinder = mockRaceFinder()
+    const sut = new RaceFinderController(raceFinder)
+
+    const error = new KnownError(faker.random.words())
+    raceFinder.find.mockRejectedValueOnce(error)
+    const result = await sut.handle(mockRaceFinderParams())
+
+    const httpErrorResponse: HttpErrorResponse = {
+      errors: [error.message],
+      statusCode: HttpStatusCode.SERVER_ERROR,
     }
 
     expect(result).toEqual(httpErrorResponse)
