@@ -1,3 +1,4 @@
+import { KnownError } from 'domain/errors/known-error'
 import { Race } from 'domain/models/race'
 import { RaceFinder, RaceFinderParams } from 'domain/use-cases/race-finder'
 import { MissingParamError } from 'presentation/errors/missing-param-error'
@@ -24,12 +25,20 @@ export class RaceFinderController implements Controller {
         statusCode: HttpStatusCode.BAD_REQUEST,
       }
     }
+    try {
+      const data = await this.raceFinder.find(params)
 
-    const data = await this.raceFinder.find(params)
-
-    return {
-      data,
-      statusCode: HttpStatusCode.CREATED,
+      return {
+        data,
+        statusCode: HttpStatusCode.CREATED,
+      }
+    } catch (error) {
+      if (error instanceof KnownError) {
+        return {
+          errors: [error.message],
+          statusCode: HttpStatusCode.SERVER_ERROR,
+        }
+      }
     }
   }
 }
