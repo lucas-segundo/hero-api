@@ -1,10 +1,10 @@
 import * as request from 'supertest'
 import { HttpStatusCode } from 'presentation/protocols/http'
-import { checkIfObjectKeyExist } from './helpers'
-import { getAuthToken } from './helpers/get-auth-token'
+import { checkIfObjectKeyExist } from '../helpers'
+import { getAuthToken } from '../helpers/get-auth-token'
 import { mockRaceCreationParams } from 'domain/use-cases/race-creation/mock'
 import { RaceCreationParams } from 'domain/use-cases/race-creation'
-import { TestEnvVar } from './helpers/test-env-var'
+import { TestEnvVar } from '../helpers/test-env-var'
 
 describe('Races Route (e2e)', () => {
   let bearerToken: string
