@@ -6,8 +6,11 @@ export class DbRaceFinder implements RaceFinder {
   constructor(private raceFinderRepository: RaceFinderRepository) {}
 
   async find(params: RaceFinderParams): Promise<Race> {
-    await this.raceFinderRepository.find(params)
+    const { id, title } = await this.raceFinderRepository.find(params)
 
-    return
+    return {
+      id: id.toString(),
+      title,
+    }
   }
 }
