@@ -1,11 +1,8 @@
-import { DbRaceCreation } from 'app/use-cases/db-race-creation'
-import { KnexDbHandler } from 'infra/knex/config/knex-db-handler'
-import { KnexRaceCreaterRepository } from 'infra/knex/repositories/race-creater'
+import { makeRaceCreation } from 'main/use-cases/race-creation-factory'
 import { RaceCreationController } from 'presentation/controllers/race-creation'
 
 export const makeRaceCreationController = () => {
-  const repo = new KnexRaceCreaterRepository(KnexDbHandler.client)
-  const raceCreation = new DbRaceCreation(repo)
+  const raceCreation = makeRaceCreation()
 
   return new RaceCreationController(raceCreation)
 }
