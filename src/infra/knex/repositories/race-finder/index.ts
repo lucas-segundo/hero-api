@@ -10,8 +10,12 @@ export class KnexRaceFinderRepository implements RaceFinderRepository {
   async find({
     id,
   }: RaceFinderRepositoryParams): Promise<RaceFinderRepositoryModel> {
-    await this.client.select('*').from('races').where('id', id).first()
+    const race: RaceFinderRepositoryModel = await this.client
+      .select('*')
+      .from('races')
+      .where('id', id)
+      .first()
 
-    return
+    return race
   }
 }
