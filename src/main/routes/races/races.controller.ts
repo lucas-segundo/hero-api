@@ -26,8 +26,8 @@ export class RacesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res) {
-    await this.racesService.findOne(id)
+    const result = await this.racesService.findOne(id)
 
-    return
+    handleResponse(res, result)
   }
 }
