@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Res, UseGuards } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  UseGuards,
+  Get,
+  Param,
+} from '@nestjs/common'
 import { RacesService } from './races.service'
 import { CreateRaceDto } from './dto/create-race.dto'
 import { handleResponse } from 'main/helpers/handle-response'
@@ -14,5 +22,12 @@ export class RacesController {
     const result = await this.racesService.create(createRaceDto)
 
     handleResponse(res, result)
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string, @Res() res) {
+    await this.racesService.findOne(id)
+
+    return
   }
 }
