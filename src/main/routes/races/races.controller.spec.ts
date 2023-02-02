@@ -78,7 +78,7 @@ describe('RacesController', () => {
     expect(findOneSpy).toBeCalledWith(id)
   })
 
-  it('should service.findOne with right data', async () => {
+  it('should service.findOne respond with right data', async () => {
     const findSpy = jest.spyOn(service, 'findOne')
     const result: HttpResponse = {
       data: mockRace(),
@@ -92,5 +92,23 @@ describe('RacesController', () => {
 
     expect(res.status).toBeCalledWith(result.statusCode)
     expect(res.send).toBeCalledWith({ data: result.data })
+  })
+
+  it('should service.findOne respond with right error if it fails', async () => {
+    const findSpy = jest.spyOn(service, 'findOne')
+    const result: HttpErrorResponse = {
+      errors: [faker.random.words()],
+      statusCode: faker.internet.httpStatusCode({
+        types: ['serverError', 'clientError'],
+      }),
+    }
+    findSpy.mockResolvedValueOnce(result)
+
+    const res = mockExpressResponse()
+    const params = mockRaceFinderParams()
+    await controller.findOne(params.id, res)
+
+    expect(res.status).toBeCalledWith(result.statusCode)
+    expect(res.send).toBeCalledWith({ errors: result.errors })
   })
 })
