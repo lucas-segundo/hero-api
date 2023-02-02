@@ -4,7 +4,7 @@ export type RaceFinderRepositoryModel = {
 }
 
 export type RaceFinderRepositoryParams = {
-  id: string
+  id: string | number
 }
 
 export interface RaceFinderRepository {
