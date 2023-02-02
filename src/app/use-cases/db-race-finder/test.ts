@@ -2,6 +2,7 @@ import {
   mockRaceFinderRepository,
   mockRaceFinderRepositoryModel,
 } from 'app/protocols/race-finder-repository/mock'
+import { UnexpectedError } from 'domain/errors/unexpected-error'
 import { Race } from 'domain/models/race'
 import { mockRaceFinderParams } from 'domain/use-cases/race-finder/mock'
 import { DbRaceFinder } from '.'
@@ -43,5 +44,16 @@ describe('DbRaceFinder', () => {
       title: raceFinderRepoModel.title,
     }
     expect(race).toEqual(expectedRace)
+  })
+
+  it('should throw unexpected error if something wrong has happened', async () => {
+    const { sut, raceFinderRepo } = makeSut()
+
+    raceFinderRepo.find.mockRejectedValueOnce(new Error())
+
+    const params = mockRaceFinderParams()
+    const result = sut.find(params)
+
+    await expect(result).rejects.toThrowError(new UnexpectedError())
   })
 })
