@@ -39,7 +39,7 @@ describe('RaceFinderController', () => {
 
     const expectedResponse: HttpResponse<Race> = {
       data: race,
-      statusCode: HttpStatusCode.CREATED,
+      statusCode: HttpStatusCode.OK,
     }
 
     expect(data).toEqual(expectedResponse)

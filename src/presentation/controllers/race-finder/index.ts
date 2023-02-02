@@ -31,7 +31,7 @@ export class RaceFinderController implements Controller {
 
       return {
         data,
-        statusCode: HttpStatusCode.CREATED,
+        statusCode: HttpStatusCode.OK,
       }
     } catch (error) {
       if (error instanceof KnownError) {
