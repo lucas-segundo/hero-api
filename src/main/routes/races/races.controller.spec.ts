@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import { Test, TestingModule } from '@nestjs/testing'
 import { mockRace } from 'domain/models/race/mock'
 import { mockRaceCreationParams } from 'domain/use-cases/race-creation/mock'
+import { mockRaceFinderParams } from 'domain/use-cases/race-finder/mock'
 import { mockExpressResponse } from 'main/helpers/mock-express-response'
 import {
   HttpErrorResponse,
@@ -66,5 +67,14 @@ describe('RacesController', () => {
 
     expect(res.status).toBeCalledWith(result.statusCode)
     expect(res.send).toBeCalledWith({ errors: result.errors })
+  })
+
+  it('should call service.findOne with right params', async () => {
+    const { id } = mockRaceFinderParams()
+    const findOneSpy = jest.spyOn(service, 'findOne')
+    const res = mockExpressResponse()
+    await controller.findOne(id, res)
+
+    expect(findOneSpy).toBeCalledWith(id)
   })
 })
